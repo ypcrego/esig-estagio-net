@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
+using System.Threading.Tasks;
+using System.Web.UI;
 using Oracle.ManagedDataAccess.Client;
 
 namespace WebApplication1
@@ -13,36 +15,50 @@ namespace WebApplication1
         {
             if (!IsPostBack)
             {
-                CarregarSalarios();
+
             }
         }
 
-        protected void btnCalcular_Click(object sender, EventArgs e)
+        protected void BtnCalcular_Click(object sender, EventArgs e)
         {
+            RegisterAsyncTask(new PageAsyncTask(ExecuteCalculationAsync));
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
+        }
+
+        private async Task ExecuteCalculationAsync()
+        {
+            DateTime start = DateTime.Now;
+
+
             using (OracleConnection conn = new OracleConnection(connectionString))
             {
-                conn.Open();
+                await conn.OpenAsync();
                 using (OracleCommand cmd = new OracleCommand("calcular_salarios", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.ExecuteNonQuery();
+                    await cmd.ExecuteNonQueryAsync();
                 }
             }
 
-            CarregarSalarios();
+            await CarregarSalariosAsync();
+            DateTime end = DateTime.Now;
+            TimeSpan duration = end - start;
+            System.Diagnostics.Debug.WriteLine($"Query duration: {duration.TotalSeconds} seconds");
         }
 
-        private void CarregarSalarios()
+        private async Task CarregarSalariosAsync()
         {
+
             using (OracleConnection conn = new OracleConnection(connectionString))
             {
-                conn.Open();
-                using (OracleCommand cmd = new OracleCommand("SELECT * FROM pessoa_salario", conn))
+                await conn.OpenAsync();
+
+                using (OracleCommand cmd = new OracleCommand("SELECT * FROM ESIG_ESTAGIO.pessoa_salario", conn))
                 {
-                    using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+                    using (OracleDataReader reader = await cmd.ExecuteReaderAsync())
                     {
                         DataTable dt = new DataTable();
-                        da.Fill(dt);
+                        dt.Load(reader);
                         gvSalarios.DataSource = dt;
                         gvSalarios.DataBind();
                     }
