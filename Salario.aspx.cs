@@ -25,6 +25,12 @@ namespace WebApplication1
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
         }
 
+        protected void BtnVerSalarios_Click(object sender, EventArgs e)
+        {
+            RegisterAsyncTask(new PageAsyncTask(CarregarSalariosAsync));
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
+        }
+
         private async Task ExecuteCalculationAsync()
         {
             DateTime start = DateTime.Now;
