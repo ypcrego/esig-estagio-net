@@ -43,5 +43,21 @@ namespace WebApplication1
             _pessoaRepo.Excluir(pessoaId);
             CarregarPessoas();
         }
+
+        // Deletar as pessoas selecionadas
+        protected void BtnDeletarSelecionados_Click(object sender, EventArgs e)
+        {
+            foreach (GridViewRow row in gvPessoas.Rows)
+            {
+                CheckBox chkSelecionar = (CheckBox)row.FindControl("chkSelecionar");
+                if (chkSelecionar != null && chkSelecionar.Checked)
+                {
+                    int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[row.RowIndex].Value);
+                    _pessoaRepo.Excluir(pessoaId);
+                }
+            }
+            CarregarPessoas();
+        }
+
     }
 }
