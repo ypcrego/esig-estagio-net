@@ -23,7 +23,7 @@
 
             <div class="col-md-6">
                 <label for="txtTelefone" class="form-label">Telefone</label>
-                <asp:TextBox ID="txtTelefone" runat="server" CssClass="form-control" ClientIDMode="Static" OnKeyUp="formatTelefone();" />
+                <asp:TextBox MaxLength="15" ID="txtTelefone" runat="server" CssClass="form-control" ClientIDMode="Static" OnKeyUp="formatTelefone();" />
                 <asp:RequiredFieldValidator ControlToValidate="txtTelefone" runat="server" ErrorMessage="Telefone é obrigatório" CssClass="text-danger" Display="Dynamic" />
             </div>
 
@@ -69,6 +69,15 @@
                 <label for="txtDataNascimento" class="form-label">Data de Nascimento</label>
                 <asp:TextBox ID="txtDataNascimento" runat="server" CssClass="form-control" TextMode="Date" />
                 <asp:RequiredFieldValidator ControlToValidate="txtDataNascimento" runat="server" ErrorMessage="Data de Nascimento é obrigatória" CssClass="text-danger" Display="Dynamic" />
+                <asp:CompareValidator
+                    ID="dateValidator" runat="server"
+                    Type="Date"
+                    Operator="DataTypeCheck"
+                    ControlToValidate="txtDataNascimento"
+                    ErrorMessage="Insira uma data válida"
+                    CssClass="text-danger"
+                    Display="Dynamic">
+                </asp:CompareValidator>
             </div>
 
             <div class="col-md-6">
@@ -82,8 +91,8 @@
         </div>
 
         <div class="mt-4 d-flex gap-2">
-            <asp:Button ID="btnSalvar" runat="server" Text="Salvar" CssClass="btn btn-primary" OnClick="btnSalvar_Click" />
-            <asp:HyperLink ID="btnCancelar" runat="server" NavigateUrl="Pessoa.aspx" CssClass="btn btn-secondary">Cancelar</asp:HyperLink>
+            <asp:Button ID="btnSalvar" runat="server" Text="Salvar" CssClass="btn btn-primary" OnClick="BtnSalvar_Click" />
+            <asp:HyperLink ID="btnCancelar" runat="server" NavigateUrl="PessoaList.aspx" CssClass="btn btn-secondary">Cancelar</asp:HyperLink>
         </div>
     </asp:Panel>
 </asp:Content>

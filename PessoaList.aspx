@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Pessoas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Pessoa.aspx.cs" Inherits="WebApplication1.Pessoa" %>
+﻿<%@ Page Title="Pessoas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PessoaList.aspx.cs" Inherits="WebApplication1.PessoaList" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2 class="mb-4">Gerenciamento de Pessoas</h2>
@@ -6,13 +6,13 @@
     <div class="mt-4">
         <asp:Button ID="btnNovaPessoa" runat="server" Text="Adicionar Nova Pessoa"
             CssClass="btn btn-success"
-            OnClick="btnNovaPessoa_Click" />
+            OnClick="BtnNovaPessoa_Click" />
     </div>
     <!-- Lista de Pessoas -->
     <div class="mt-3">
         <asp:GridView ID="gvPessoas" runat="server" AutoGenerateColumns="False" DataKeyNames="id"
             CssClass="table table-striped table-bordered table-responsive"
-            OnRowDeleting="gvPessoas_RowDeleting">
+            OnRowDeleting="GvPessoas_RowDeleting">
             <Columns>
                 <asp:BoundField DataField="id" HeaderText="ID" ReadOnly="True" />
                 <asp:BoundField DataField="nome" HeaderText="Nome" />

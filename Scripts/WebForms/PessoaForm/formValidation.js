@@ -1,4 +1,19 @@
-﻿
+﻿function formatTelefone() {
+    var telefone = document.getElementById('txtTelefone');
+
+    if (telefone) {
+        var value = telefone.value.replace(/\D/g, ''); // Remove non-numeric characters
+        value = value.replace(/\D/g, '')
+        value = value.replace(/(\d{2})(\d)/, "($1) $2")
+        value = value.replace(/(\d)(\d{4})$/, "$1-$2")
+
+        // Apply the formatted value back to the input field
+        telefone.value = value;
+    }
+}
+
+
+
 // Function to format the CEP with hyphen
 function formatCEP() {
     var cep = document.getElementById('txtCEP');
@@ -10,18 +25,4 @@ function formatCEP() {
         cep.value = value;
     }
 }
-function formatTelefone() {
-    var telefone = document.getElementById('txtTelefone');
-    if (telefone) {
-        console.log("yes")
-        var value = telefone.value.replace(/\D/g, ''); // Remove non-numeric characters
-        if (value.length > 2) {
-            value = '(' + value.substring(0, 2) + ') ' + value.substring(2); // Add parentheses
-        }
-        if (value.length > 9) {
-            value = value.substring(0, 9) + '-' + value.substring(9, 13); // Add hyphen after the 9th character
-        }
-        telefone.value = value;
-    }
-    console.log("aa")
-}
+
