@@ -2,7 +2,12 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2 class="mb-4">Gerenciamento de Pessoas</h2>
-
+    <!-- Botão Adicionar -->
+    <div class="mt-4">
+        <asp:Button ID="btnNovaPessoa" runat="server" Text="Adicionar Nova Pessoa"
+            CssClass="btn btn-success"
+            OnClick="btnNovaPessoa_Click" />
+    </div>
     <!-- Lista de Pessoas -->
     <div class="mt-3">
         <asp:GridView ID="gvPessoas" runat="server" AutoGenerateColumns="False" DataKeyNames="id"
@@ -32,10 +37,4 @@
         </asp:GridView>
     </div>
 
-    <!-- Botão Adicionar -->
-    <div class="mt-4">
-        <asp:Button ID="btnNovaPessoa" runat="server" Text="Adicionar Nova Pessoa"
-            CssClass="btn btn-success"
-            OnClick="btnNovaPessoa_Click" />
-    </div>
 </asp:Content>

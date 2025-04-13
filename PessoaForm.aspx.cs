@@ -124,12 +124,16 @@ namespace WebApplication1
             cmd.Parameters.Add(":nome", txtNome.Text);
             cmd.Parameters.Add(":cidade", txtCidade.Text);
             cmd.Parameters.Add(":email", txtEmail.Text);
-            cmd.Parameters.Add(":cep", txtCEP.Text.Length > 26 ? txtCEP.Text.Substring(0, 26) : txtCEP.Text.Trim());
+            cmd.Parameters.Add(":cep", txtCEP.Text);
             cmd.Parameters.Add(":endereco", txtEndereco.Text);
             cmd.Parameters.Add(":pais", txtPais.Text);
             cmd.Parameters.Add(":usuario", txtUsuario.Text);
             cmd.Parameters.Add(":telefone", txtTelefone.Text);
-            cmd.Parameters.Add(":dataNascimento", Convert.ToDateTime(txtDataNascimento.Text).Date);
+            DateTime.TryParseExact(txtDataNascimento.Text, "yyyy-MM-dd",
+                                       System.Globalization.CultureInfo.InvariantCulture,
+                                       System.Globalization.DateTimeStyles.None,
+                                       out DateTime dataNascimento);
+            cmd.Parameters.Add(":dataNascimento", dataNascimento.Date);
 
             if (int.TryParse(ddlCargo.SelectedValue, out int cargoId))
             {
