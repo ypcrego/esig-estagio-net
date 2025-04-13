@@ -13,13 +13,18 @@
 
     <!-- Lista de Pessoas -->
     <div class="mt-3">
-        <asp:GridView ID="gvPessoas" runat="server" AutoGenerateColumns="False" DataKeyNames="id"
-            CssClass="table table-striped table-bordered table-responsive"
-            OnRowDeleting="GvPessoas_RowDeleting">
+        <asp:GridView ID="gvPessoas" runat="server"
+            AllowPaging="true" PageSize="15"
+            CssClass="table table-striped table-bordered"
+            AutoGenerateColumns="False"
+            OnPageIndexChanging="GvPessoas_PageIndexChanging"
+            OnRowDeleting="GvPessoas_RowDeleting"
+            DataKeyNames="id">
+
             <Columns>
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:CheckBox ID="chkSelecionar" runat="server" CssClass="form-check form-check-lg"/>
+                        <asp:CheckBox ID="chkSelecionar" runat="server" CssClass="form-check form-check-lg" />
                     </ItemTemplate>
                 </asp:TemplateField>
 
@@ -33,18 +38,26 @@
                         <asp:HyperLink ID="lnkEditar" runat="server"
                             NavigateUrl='<%# Eval("id", "PessoaForm.aspx?id={0}") %>'
                             CssClass="btn btn-sm btn-primary me-2">
-                            <i class="bi bi-pencil"></i> Editar
+                    <i class="bi bi-pencil"></i> Editar
                         </asp:HyperLink>
 
                         <asp:LinkButton ID="btnExcluir" runat="server" CommandName="Delete"
                             CssClass="btn btn-sm btn-danger"
                             OnClientClick="return confirm('Tem certeza que deseja excluir esta pessoa?');">
-                            <i class="bi bi-trash"></i> Excluir
+                    <i class="bi bi-trash"></i> Excluir
                         </asp:LinkButton>
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
+
+            <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
+            <PagerSettings Mode="NumericFirstLast" FirstPageText="«"
+                LastPageText="»"
+                NextPageText="›"
+                PreviousPageText="‹" />
+
         </asp:GridView>
+
 
         <!-- Botão Deletar Selecionados -->
         <div class="mt-4">

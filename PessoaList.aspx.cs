@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
+using System.Linq;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Data;
@@ -20,15 +21,25 @@ namespace WebApplication1
         {
             if (!IsPostBack)
             {
-                CarregarPessoas();
+                CarregarPessoas(0);
             }
         }
 
-        private void CarregarPessoas()
+        private void CarregarPessoas(int pageIndex)
         {
-            var pessoas = _pessoaRepo.ListarTodos();
+            // Assuming _pessoaRepo.ListarTodos() is your data retrieval method
+            var pessoas = _pessoaRepo.ListarTodos(); // lista completa
+
+            gvPessoas.PageIndex = pageIndex;
             gvPessoas.DataSource = pessoas;
             gvPessoas.DataBind();
+
+        }
+
+        protected void GvPessoas_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPessoas.PageIndex = e.NewPageIndex; // Set the page index to the new page
+            CarregarPessoas(e.NewPageIndex); // Load data for the new page
         }
 
         protected void BtnNovaPessoa_Click(object sender, EventArgs e)
@@ -41,7 +52,7 @@ namespace WebApplication1
         {
             int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[e.RowIndex].Value);
             _pessoaRepo.Excluir(pessoaId);
-            CarregarPessoas();
+            CarregarPessoas(gvPessoas.PageIndex);
         }
 
         // Deletar as pessoas selecionadas
@@ -56,7 +67,7 @@ namespace WebApplication1
                     _pessoaRepo.Excluir(pessoaId);
                 }
             }
-            CarregarPessoas();
+            CarregarPessoas(gvPessoas.PageIndex);
         }
 
     }

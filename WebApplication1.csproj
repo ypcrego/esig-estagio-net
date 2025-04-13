@@ -154,6 +154,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\pessoa-list.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Home.aspx" />
     <Content Include="Salario.aspx" />
