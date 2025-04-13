@@ -155,7 +155,8 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Default.aspx" />
+    <Content Include="Home.aspx" />
+    <Content Include="Salario.aspx" />
     <Content Include="PessoaForm.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -247,12 +248,19 @@
     </Compile>
     <Compile Include="Data\CargoRepository.cs" />
     <Compile Include="Data\PessoaRepository.cs" />
-    <Compile Include="Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
+    <Compile Include="Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
+    <Compile Include="Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Salario.aspx.cs">
+      <DependentUpon>Salario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Salario.aspx.designer.cs">
+      <DependentUpon>Salario.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\Cargo.cs" />
     <Compile Include="Models\Pessoa.cs" />
