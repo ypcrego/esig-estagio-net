@@ -66,26 +66,6 @@ namespace WebApplication1.Data
             }
         }
 
-        public List<Cargo> ListarCargos()
-        {
-            var cargos = new List<Cargo>();
-            using (var conn = new OracleConnection(_connectionString))
-            {
-                conn.Open();
-                var cmd = new OracleCommand("SELECT id, nome FROM cargo", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    cargos.Add(new Cargo
-                    {
-                        Id = Convert.ToInt32(reader["id"]),
-                        Nome = reader["nome"].ToString()
-                    });
-                }
-            }
-            return cargos;
-        }
-
         public Pessoa ObterPessoa(int id)
         {
             Pessoa pessoa = null;
@@ -174,5 +154,35 @@ namespace WebApplication1.Data
             cmd.Parameters.Add(":dataNascimento", pessoa.DataNascimento);
             cmd.Parameters.Add(":cargo", pessoa.CargoId);
         }
+        public List<Pessoa> BuscarPorNome(string nome)
+        {
+            using (var conn = new OracleConnection(_connectionString))
+            {
+                conn.Open();
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM pessoa WHERE LOWER(nome) LIKE :nome ORDER BY nome";
+                cmd.Parameters.Add(new OracleParameter("nome", $"%{nome.ToLower()}%"));
+
+                var lista = new List<Pessoa>();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new Pessoa
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Nome = reader["nome"].ToString(),
+                            Email = reader["email"].ToString(),
+                            Telefone = reader["telefone"].ToString()
+                        });
+                    }
+                }
+
+                return lista;
+            }
+        }
+
     }
+
+
 }

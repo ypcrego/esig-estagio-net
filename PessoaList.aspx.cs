@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Data;
+using WebApplication1.Models;
 
 namespace WebApplication1
 {
@@ -25,22 +26,39 @@ namespace WebApplication1
             }
         }
 
-        private void CarregarPessoas(int pageIndex)
+        private void CarregarPessoas(int pageIndex, string filtroNome = "")
         {
-            // Assuming _pessoaRepo.ListarTodos() is your data retrieval method
-            var pessoas = _pessoaRepo.ListarTodos(); // lista completa
+            var pessoas = string.IsNullOrWhiteSpace(filtroNome)
+                ? _pessoaRepo.ListarTodos()
+                : _pessoaRepo.BuscarPorNome(filtroNome);
 
             gvPessoas.PageIndex = pageIndex;
-            gvPessoas.DataSource = pessoas;
-            gvPessoas.DataBind();
+
+            if (pessoas.Count == 0)
+            {
+                gvPessoas.Visible = false;
+                lblSemResultados.Visible = true;
+                btnDeletarSelecionados.Visible = false;  
+            }
+            else
+            {
+                gvPessoas.Visible = true;
+                lblSemResultados.Visible = false;
+                btnDeletarSelecionados.Visible = true; 
+                gvPessoas.DataSource = pessoas;
+                gvPessoas.DataBind();
+            }
 
         }
+
 
         protected void GvPessoas_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            gvPessoas.PageIndex = e.NewPageIndex; // Set the page index to the new page
-            CarregarPessoas(e.NewPageIndex); // Load data for the new page
+            string nome = txtBuscaNome.Text.Trim();
+            gvPessoas.PageIndex = e.NewPageIndex;
+            CarregarPessoas(e.NewPageIndex, nome); // ← Paginação funciona com o filtro atual
         }
+
 
         protected void BtnNovaPessoa_Click(object sender, EventArgs e)
         {
@@ -69,6 +87,19 @@ namespace WebApplication1
             }
             CarregarPessoas(gvPessoas.PageIndex);
         }
+
+        protected void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            string nome = txtBuscaNome.Text.Trim();
+            CarregarPessoas(0, nome);
+        }
+
+        protected void TxtBuscaNome_TextChanged(object sender, EventArgs e)
+        {
+            string nome = txtBuscaNome.Text.Trim();
+            CarregarPessoas(0, nome);
+        }
+
 
     }
 }
