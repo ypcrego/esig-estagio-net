@@ -14,16 +14,19 @@ namespace WebApplication1.Services
             _pessoaRepo = new PessoaRepository();
         }
 
-        public async Task<List<Pessoa>> ObterPessoas(string filtroNome = "")
+        public async Task<List<Pessoa>> FindAll()
         {
-            return string.IsNullOrWhiteSpace(filtroNome)
-                ? await _pessoaRepo.ListarTodos()
-                : await _pessoaRepo.BuscarPorNome(filtroNome);
+            return await _pessoaRepo.FindAll();
         }
 
-        public async Task ExcluirPessoa(int id)
+        public async Task<List<Pessoa>> FindAllByNome(string nome = "")
         {
-            await _pessoaRepo.Excluir(id);
+            return await _pessoaRepo.FindAllByNome(nome);
+        }
+
+        public async Task DeleteById(int id)
+        {
+            await _pessoaRepo.DeleteById(id);
         }
     }
 }

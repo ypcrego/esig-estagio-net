@@ -25,13 +25,16 @@ namespace WebApplication1
         {
             if (!IsPostBack)
             {
-                RegisterAsyncTask(new PageAsyncTask(() => CarregarPessoas(0)));
+                RegisterAsyncTask(new PageAsyncTask(() => LoadPessoas(0)));
             }
         }
 
-        private async Task CarregarPessoas(int pageIndex, string filtroNome = "")
+        private async Task LoadPessoas(int pageIndex, string filtroNome = "")
         {
-            var pessoas = await _pessoaService.ObterPessoas(filtroNome);
+            var pessoas = string.IsNullOrWhiteSpace(filtroNome)
+            ? await _pessoaService.FindAll()
+            : await _pessoaService.FindAllByNome(filtroNome);
+
 
             gvPessoas.PageIndex = pageIndex;
 
@@ -55,7 +58,7 @@ namespace WebApplication1
         protected async void GvPessoas_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvPessoas.PageIndex = e.NewPageIndex; // Update the page index
-            await CarregarPessoas(e.NewPageIndex, txtBuscaNome.Text.Trim());
+            await LoadPessoas(e.NewPageIndex, txtBuscaNome.Text.Trim());
         }
 
 
@@ -67,8 +70,8 @@ namespace WebApplication1
         protected async void GvPessoas_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[e.RowIndex].Value);
-            _pessoaService.ExcluirPessoa(pessoaId).GetAwaiter().GetResult();
-            await CarregarPessoas(gvPessoas.PageIndex); ;
+            _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
+            await LoadPessoas(gvPessoas.PageIndex); ;
         }
 
         // Deletar as pessoas selecionadas
@@ -80,20 +83,20 @@ namespace WebApplication1
                 if (chkSelecionar?.Checked == true)
                 {
                     int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[row.RowIndex].Value);
-                    _pessoaService.ExcluirPessoa(pessoaId).GetAwaiter().GetResult();
+                    _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
                 }
             }
-           await CarregarPessoas(gvPessoas.PageIndex); ;
+           await LoadPessoas(gvPessoas.PageIndex); ;
         }
 
         protected async void BtnBuscar_Click(object sender, EventArgs e)
         {
-            await CarregarPessoas(0, txtBuscaNome.Text.Trim());
+            await LoadPessoas(0, txtBuscaNome.Text.Trim());
         }
 
         protected async void TxtBuscaNome_TextChanged(object sender, EventArgs e)
         {
-            await CarregarPessoas(0, txtBuscaNome.Text.Trim());
+            await LoadPessoas(0, txtBuscaNome.Text.Trim());
         }
 
 

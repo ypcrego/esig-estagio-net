@@ -36,7 +36,7 @@ namespace WebApplication1
 
         private async Task CarregarPessoa()
         {
-            var pessoa = await _pessoaRepo.ObterPessoa(PessoaId.Value);
+            var pessoa = await _pessoaRepo.FindById(PessoaId.Value);
             if (pessoa != null)
             {
                 txtNome.Text = pessoa.Nome;
@@ -77,11 +77,11 @@ namespace WebApplication1
             if (IsEdicao)
             {
                 pessoa.Id = PessoaId.Value;
-                _pessoaRepo.AtualizarPessoa(pessoa);
+                _pessoaRepo.Update(pessoa);
             }
             else
             {
-                _pessoaRepo.AdicionarPessoa(pessoa);
+                _pessoaRepo.Add(pessoa);
             }
 
             Response.Redirect("PessoaList.aspx");

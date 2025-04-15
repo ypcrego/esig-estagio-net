@@ -17,7 +17,7 @@ namespace WebApplication1.Data
         }
 
 
-        public async Task<Pessoa> ObterPessoa(int id)
+        public async Task<Pessoa> FindById(int id)
         {
             Pessoa pessoa = null;
             using (var conn = new OracleConnection(_connectionString))
@@ -54,7 +54,7 @@ namespace WebApplication1.Data
             return pessoa;
         }
 
-        public async Task<List<Pessoa>> ListarTodos()
+        public async Task<List<Pessoa>> FindAll()
         {
             var pessoas = new List<Pessoa>();
 
@@ -90,7 +90,7 @@ namespace WebApplication1.Data
             return pessoas;
         }
 
-        public async Task<List<Pessoa>> BuscarPorNome(string nome)
+        public async Task<List<Pessoa>> FindAllByNome(string nome)
         {
             var lista = new List<Pessoa>();
 
@@ -120,7 +120,7 @@ namespace WebApplication1.Data
             }
         }
 
-        public async Task Excluir(int id)
+        public async Task DeleteById(int id)
         {
             using (var conn = new OracleConnection(_connectionString))
             {
@@ -138,7 +138,7 @@ namespace WebApplication1.Data
 
 
 
-        public async Task AdicionarPessoa(Pessoa pessoa)
+        public async Task Add(Pessoa pessoa)
         {
             using (var conn = new OracleConnection(_connectionString))
             {
@@ -155,7 +155,7 @@ namespace WebApplication1.Data
             }
         }
 
-        public async Task AtualizarPessoa(Pessoa pessoa)
+        public async Task Update(Pessoa pessoa)
         {
             using (var conn = new OracleConnection(_connectionString))
             {
