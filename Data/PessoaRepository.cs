@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Models;
 
@@ -15,20 +16,58 @@ namespace WebApplication1.Data
             _connectionString = ConfigurationManager.ConnectionStrings["OracleDb"].ConnectionString;
         }
 
-        public List<Pessoa> ListarTodos()
+
+        public async Task<Pessoa> ObterPessoa(int id)
+        {
+            Pessoa pessoa = null;
+            using (var conn = new OracleConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                var cmd = new OracleCommand(@"
+                    SELECT id, nome, cidade, email, cep, endereco, pais, usuario, telefone, data_nascimento, cargo_id 
+                    FROM ESIG_ESTAGIO.pessoa 
+                    WHERE id = :id", conn);
+                cmd.Parameters.Add(":id", id);
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        pessoa = new Pessoa
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Nome = reader["nome"].ToString(),
+                            Cidade = reader["cidade"].ToString(),
+                            Email = reader["email"].ToString(),
+                            Cep = reader["cep"].ToString(),
+                            Endereco = reader["endereco"].ToString(),
+                            Pais = reader["pais"].ToString(),
+                            Usuario = reader["usuario"].ToString(),
+                            Telefone = reader["telefone"].ToString(),
+                            DataNascimento = Convert.ToDateTime(reader["DATA_NASCIMENTO"]),
+                            CargoId = Convert.ToInt32(reader["cargo_id"])
+                        };
+                    }
+                }
+            }
+            return pessoa;
+        }
+
+        public async Task<List<Pessoa>> ListarTodos()
         {
             var pessoas = new List<Pessoa>();
 
             using (var conn = new OracleConnection(_connectionString))
             {
-                conn.Open();
+                await conn.OpenAsync();
                 string query = @"SELECT ID, NOME, CIDADE, EMAIL, CEP, ENDERECO, PAIS, USUARIO, TELEFONE, DATA_NASCIMENTO, CARGO_ID
                                  FROM ESIG_ESTAGIO.pessoa";
 
                 using (var cmd = new OracleCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
+                using (var reader = await cmd.ExecuteReaderAsync())
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync())
                     {
                         pessoas.Add(new Pessoa
                         {
@@ -51,60 +90,60 @@ namespace WebApplication1.Data
             return pessoas;
         }
 
-        public void Excluir(int id)
+        public async Task<List<Pessoa>> BuscarPorNome(string nome)
+        {
+            var lista = new List<Pessoa>();
+
+            using (var conn = new OracleConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM pessoa WHERE LOWER(nome) LIKE :nome ORDER BY nome";
+                cmd.Parameters.Add(new OracleParameter("nome", $"%{nome.ToLower()}%"));
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        lista.Add(new Pessoa
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Nome = reader["nome"].ToString(),
+                            Email = reader["email"].ToString(),
+                            Telefone = reader["telefone"].ToString()
+                        });
+                    }
+                }
+
+                return lista;
+            }
+        }
+
+        public async Task Excluir(int id)
         {
             using (var conn = new OracleConnection(_connectionString))
             {
-                conn.Open();
+                await conn.OpenAsync();
+
                 string sql = "DELETE FROM pessoa WHERE ID = :id";
 
                 using (var cmd = new OracleCommand(sql, conn))
                 {
                     cmd.Parameters.Add(":id", id);
-                    cmd.ExecuteNonQuery();
+                    await cmd.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public Pessoa ObterPessoa(int id)
-        {
-            Pessoa pessoa = null;
-            using (var conn = new OracleConnection(_connectionString))
-            {
-                conn.Open();
-                var cmd = new OracleCommand(@"
-                    SELECT id, nome, cidade, email, cep, endereco, pais, usuario, telefone, data_nascimento, cargo_id 
-                    FROM ESIG_ESTAGIO.pessoa 
-                    WHERE id = :id", conn);
-                cmd.Parameters.Add(":id", id);
 
-                var reader = cmd.ExecuteReader();
-                if (reader.Read())
-                {
-                    pessoa = new Pessoa
-                    {
-                        Id = Convert.ToInt32(reader["id"]),
-                        Nome = reader["nome"].ToString(),
-                        Cidade = reader["cidade"].ToString(),
-                        Email = reader["email"].ToString(),
-                        Cep = reader["cep"].ToString(),
-                        Endereco = reader["endereco"].ToString(),
-                        Pais = reader["pais"].ToString(),
-                        Usuario = reader["usuario"].ToString(),
-                        Telefone = reader["telefone"].ToString(),
-                        DataNascimento = Convert.ToDateTime(reader["DATA_NASCIMENTO"]),
-                        CargoId = Convert.ToInt32(reader["cargo_id"])
-                    };
-                }
-            }
-            return pessoa;
-        }
 
-        public void AdicionarPessoa(Pessoa pessoa)
+        public async Task AdicionarPessoa(Pessoa pessoa)
         {
             using (var conn = new OracleConnection(_connectionString))
             {
-                conn.Open();
+                await conn.OpenAsync();
+
                 var cmd = new OracleCommand(@"
                     INSERT INTO ESIG_ESTAGIO.pessoa 
                     (id, nome, cidade, email, cep, endereco, pais, usuario, telefone, data_nascimento, cargo_id)
@@ -112,15 +151,16 @@ namespace WebApplication1.Data
                     (pessoa_seq.NEXTVAL, :nome, :cidade, :email, :cep, :endereco, :pais, :usuario, :telefone, :dataNascimento, :cargo)", conn);
 
                 AdicionarParametrosComuns(cmd, pessoa);
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
         }
 
-        public void AtualizarPessoa(Pessoa pessoa)
+        public async Task AtualizarPessoa(Pessoa pessoa)
         {
             using (var conn = new OracleConnection(_connectionString))
             {
-                conn.Open();
+                await conn.OpenAsync();
+
                 var cmd = new OracleCommand(@"
                     UPDATE ESIG_ESTAGIO.pessoa SET 
                         nome = :nome, 
@@ -137,7 +177,7 @@ namespace WebApplication1.Data
 
                 AdicionarParametrosComuns(cmd, pessoa);
                 cmd.Parameters.Add(":id", pessoa.Id);
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
         }
 
@@ -154,33 +194,7 @@ namespace WebApplication1.Data
             cmd.Parameters.Add(":dataNascimento", pessoa.DataNascimento);
             cmd.Parameters.Add(":cargo", pessoa.CargoId);
         }
-        public List<Pessoa> BuscarPorNome(string nome)
-        {
-            using (var conn = new OracleConnection(_connectionString))
-            {
-                conn.Open();
-                var cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM pessoa WHERE LOWER(nome) LIKE :nome ORDER BY nome";
-                cmd.Parameters.Add(new OracleParameter("nome", $"%{nome.ToLower()}%"));
 
-                var lista = new List<Pessoa>();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        lista.Add(new Pessoa
-                        {
-                            Id = Convert.ToInt32(reader["id"]),
-                            Nome = reader["nome"].ToString(),
-                            Email = reader["email"].ToString(),
-                            Telefone = reader["telefone"].ToString()
-                        });
-                    }
-                }
-
-                return lista;
-            }
-        }
 
     }
 

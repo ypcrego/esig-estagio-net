@@ -2,35 +2,36 @@
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
     public partial class PessoaList : System.Web.UI.Page
     {
-        private PessoaRepository _pessoaRepo;
+        private PessoaService _pessoaService;
 
         public PessoaList()
         {
-            _pessoaRepo = new PessoaRepository();
+            _pessoaService = new PessoaService();
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                CarregarPessoas(0);
+                RegisterAsyncTask(new PageAsyncTask(() => CarregarPessoas(0)));
             }
         }
 
-        private void CarregarPessoas(int pageIndex, string filtroNome = "")
+        private async Task CarregarPessoas(int pageIndex, string filtroNome = "")
         {
-            var pessoas = string.IsNullOrWhiteSpace(filtroNome)
-                ? _pessoaRepo.ListarTodos()
-                : _pessoaRepo.BuscarPorNome(filtroNome);
+            var pessoas = await _pessoaService.ObterPessoas(filtroNome);
 
             gvPessoas.PageIndex = pageIndex;
 
@@ -38,66 +39,61 @@ namespace WebApplication1
             {
                 gvPessoas.Visible = false;
                 lblSemResultados.Visible = true;
-                btnDeletarSelecionados.Visible = false;  
+                btnDeletarSelecionados.Visible = false;
             }
             else
             {
                 gvPessoas.Visible = true;
                 lblSemResultados.Visible = false;
-                btnDeletarSelecionados.Visible = true; 
+                btnDeletarSelecionados.Visible = true;
                 gvPessoas.DataSource = pessoas;
                 gvPessoas.DataBind();
             }
-
         }
 
 
-        protected void GvPessoas_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        protected async void GvPessoas_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            string nome = txtBuscaNome.Text.Trim();
-            gvPessoas.PageIndex = e.NewPageIndex;
-            CarregarPessoas(e.NewPageIndex, nome); // ← Paginação funciona com o filtro atual
+            gvPessoas.PageIndex = e.NewPageIndex; // Update the page index
+            await CarregarPessoas(e.NewPageIndex, txtBuscaNome.Text.Trim());
         }
 
 
         protected void BtnNovaPessoa_Click(object sender, EventArgs e)
         {
-            // Redireciona para o formulário de nova pessoa
             Response.Redirect("PessoaForm.aspx");
         }
 
-        protected void GvPessoas_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        protected async void GvPessoas_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[e.RowIndex].Value);
-            _pessoaRepo.Excluir(pessoaId);
-            CarregarPessoas(gvPessoas.PageIndex);
+            _pessoaService.ExcluirPessoa(pessoaId).GetAwaiter().GetResult();
+            await CarregarPessoas(gvPessoas.PageIndex); ;
         }
 
         // Deletar as pessoas selecionadas
-        protected void BtnDeletarSelecionados_Click(object sender, EventArgs e)
+        protected async void BtnDeletarSelecionados_Click(object sender, EventArgs e)
         {
             foreach (GridViewRow row in gvPessoas.Rows)
             {
-                CheckBox chkSelecionar = (CheckBox)row.FindControl("chkSelecionar");
-                if (chkSelecionar != null && chkSelecionar.Checked)
+                var chkSelecionar = (CheckBox)row.FindControl("chkSelecionar");
+                if (chkSelecionar?.Checked == true)
                 {
                     int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[row.RowIndex].Value);
-                    _pessoaRepo.Excluir(pessoaId);
+                    _pessoaService.ExcluirPessoa(pessoaId).GetAwaiter().GetResult();
                 }
             }
-            CarregarPessoas(gvPessoas.PageIndex);
+           await CarregarPessoas(gvPessoas.PageIndex); ;
         }
 
-        protected void BtnBuscar_Click(object sender, EventArgs e)
+        protected async void BtnBuscar_Click(object sender, EventArgs e)
         {
-            string nome = txtBuscaNome.Text.Trim();
-            CarregarPessoas(0, nome);
+            await CarregarPessoas(0, txtBuscaNome.Text.Trim());
         }
 
-        protected void TxtBuscaNome_TextChanged(object sender, EventArgs e)
+        protected async void TxtBuscaNome_TextChanged(object sender, EventArgs e)
         {
-            string nome = txtBuscaNome.Text.Trim();
-            CarregarPessoas(0, nome);
+            await CarregarPessoas(0, txtBuscaNome.Text.Trim());
         }
 
 

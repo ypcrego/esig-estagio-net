@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -33,9 +34,9 @@ namespace WebApplication1
             ddlCargo.DataBind();
         }
 
-        private void CarregarPessoa()
+        private async Task CarregarPessoa()
         {
-            var pessoa = _pessoaRepo.ObterPessoa(PessoaId.Value);
+            var pessoa = await _pessoaRepo.ObterPessoa(PessoaId.Value);
             if (pessoa != null)
             {
                 txtNome.Text = pessoa.Nome;

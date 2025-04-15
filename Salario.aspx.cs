@@ -1,21 +1,22 @@
 ﻿using System;
-using System.Configuration;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.UI;
-using Oracle.ManagedDataAccess.Client;
+using System.Web.UI.WebControls;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
-    public partial class _Default : System.Web.UI.Page
+    public partial class Salario : System.Web.UI.Page
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["OracleDb"].ConnectionString;
+        private readonly SalarioService _salarioService = new SalarioService();
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-
+                // Nada por enquanto
             }
         }
 
@@ -35,18 +36,9 @@ namespace WebApplication1
         {
             DateTime start = DateTime.Now;
 
-
-            using (OracleConnection conn = new OracleConnection(connectionString))
-            {
-                await conn.OpenAsync();
-                using (OracleCommand cmd = new OracleCommand("calcular_salarios", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    await cmd.ExecuteNonQueryAsync();
-                }
-            }
-
+            await _salarioService.CalcularSalariosAsync();
             await CarregarSalariosAsync();
+
             DateTime end = DateTime.Now;
             TimeSpan duration = end - start;
             System.Diagnostics.Debug.WriteLine($"Query duration: {duration.TotalSeconds} seconds");
@@ -54,22 +46,9 @@ namespace WebApplication1
 
         private async Task CarregarSalariosAsync()
         {
-
-            using (OracleConnection conn = new OracleConnection(connectionString))
-            {
-                await conn.OpenAsync();
-
-                using (OracleCommand cmd = new OracleCommand("SELECT * FROM ESIG_ESTAGIO.pessoa_salario", conn))
-                {
-                    using (OracleDataReader reader = await cmd.ExecuteReaderAsync())
-                    {
-                        DataTable dt = new DataTable();
-                        dt.Load(reader);
-                        gvSalarios.DataSource = dt;
-                        gvSalarios.DataBind();
-                    }
-                }
-            }
+            DataTable salarios = await _salarioService.ObterSalariosAsync();
+            gvSalarios.DataSource = salarios;
+            gvSalarios.DataBind();
         }
     }
 }

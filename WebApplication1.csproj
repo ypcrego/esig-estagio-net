@@ -283,6 +283,8 @@
       <DependentUpon>PessoaList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\PessoaService.cs" />
+    <Compile Include="Services\SalarioService.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -308,7 +310,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Pages\" />
-    <Folder Include="Services\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

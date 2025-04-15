@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Salários" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Salario.aspx.cs" Inherits="WebApplication1._Default" Async="true" %>
+﻿<%@ Page Title="Salários" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Salario.aspx.cs" Inherits="WebApplication1.Salario" Async="true" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2 class="mb-4">Listagem de Salários</h2>
