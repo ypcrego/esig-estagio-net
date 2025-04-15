@@ -57,7 +57,8 @@ namespace WebApplication1
             }
             else
             {
-                Response.Redirect("Pessoa.aspx");
+                Response.Redirect("PessoaList.aspx", false); // Passando `false` para não terminar a resposta imediatamente.
+                Context.ApplicationInstance.CompleteRequest(); // Garantir que o ciclo de vida da página seja finalizado sem abortar a thread.
             }
         }
 
@@ -89,7 +90,8 @@ namespace WebApplication1
                 await _pessoaRepo.Add(pessoa);
             }
 
-            Response.Redirect("PessoaList.aspx");
+            Response.Redirect("PessoaList.aspx", false);
+            Context.ApplicationInstance.CompleteRequest(); 
         }
 
 
