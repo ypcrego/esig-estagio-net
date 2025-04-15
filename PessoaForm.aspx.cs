@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Threading.Tasks;
+using System.Web.UI;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -19,15 +20,19 @@ namespace WebApplication1
         {
             if (!IsPostBack)
             {
-                CarregarCargos();
-                if (IsEdicao) CarregarPessoa();
+                RegisterAsyncTask(new PageAsyncTask(async () =>
+                {
+                    await CarregarCargos();
+                    if (IsEdicao) await CarregarPessoa();
+                }));
+                h2Title.InnerText = IsEdicao ? "Editar Pessoa" : "Nova Pessoa";
             }
         }
 
-        private void CarregarCargos()
+        private async Task CarregarCargos()
         {
             // Agora utilizando o CargoRepository
-            var cargos = _cargoRepo.ListarCargos();
+            var cargos = await _cargoRepo.ListarCargos();
             ddlCargo.DataSource = cargos;
             ddlCargo.DataValueField = "Id";
             ddlCargo.DataTextField = "Nome";
@@ -56,7 +61,7 @@ namespace WebApplication1
             }
         }
 
-        protected void BtnSalvar_Click(object sender, EventArgs e)
+        protected async void BtnSalvar_Click(object sender, EventArgs e)
         {
             if (!Page.IsValid) return;
 
@@ -77,11 +82,11 @@ namespace WebApplication1
             if (IsEdicao)
             {
                 pessoa.Id = PessoaId.Value;
-                _pessoaRepo.Update(pessoa);
+                await _pessoaRepo.Update(pessoa);
             }
             else
             {
-                _pessoaRepo.Add(pessoa);
+                await _pessoaRepo.Add(pessoa);
             }
 
             Response.Redirect("PessoaList.aspx");

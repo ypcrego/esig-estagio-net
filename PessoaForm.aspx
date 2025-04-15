@@ -1,9 +1,9 @@
-﻿<%@ Page Title="Formulário de Pessoa" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PessoaForm.aspx.cs" Inherits="WebApplication1.PessoaForm" %>
+﻿<%@ Page Title="Formulário de Pessoa" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PessoaForm.aspx.cs" Inherits="WebApplication1.PessoaForm" Async="true" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <script type="text/javascript" src="Scripts/WebForms/PessoaForm/formValidation.js"></script>
 
-    <h2 class="mb-4"><%= IsEdicao ? "Editar Pessoa" : "Nova Pessoa" %></h2>
+    <h2 id="h2Title" class="mb-4" runat="server"></h2>
 
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" HeaderText="Por favor, corrija os erros abaixo:" />
 
