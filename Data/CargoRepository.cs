@@ -16,7 +16,7 @@ namespace WebApplication1.Data
             _connectionString = ConfigurationManager.ConnectionStrings["OracleDb"].ConnectionString;
         }
 
-        public async Task<List<Cargo>> ListarCargos()
+        public async Task<List<Cargo>> FindAll()
         {
             var cargos = new List<Cargo>();
             using (var conn = new OracleConnection(_connectionString))

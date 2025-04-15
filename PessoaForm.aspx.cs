@@ -11,7 +11,7 @@ namespace WebApplication1
     public partial class PessoaForm : System.Web.UI.Page
     {
         private readonly PessoaRepository _pessoaRepo = new PessoaRepository();
-        private readonly CargoRepository _cargoRepo = new CargoRepository(); // Novo repositório de Cargo
+        private readonly CargoRepository _cargoRepo = new CargoRepository();
 
         protected int? PessoaId => string.IsNullOrEmpty(Request.QueryString["id"]) ? (int?)null : Convert.ToInt32(Request.QueryString["id"]);
         protected bool IsEdicao => PessoaId.HasValue;
@@ -22,24 +22,24 @@ namespace WebApplication1
             {
                 RegisterAsyncTask(new PageAsyncTask(async () =>
                 {
-                    await CarregarCargos();
-                    if (IsEdicao) await CarregarPessoa();
+                    await LoadCargos();
+                    if (IsEdicao) await LoadPessoa();
                 }));
                 h2Title.InnerText = IsEdicao ? "Editar Pessoa" : "Nova Pessoa";
             }
         }
 
-        private async Task CarregarCargos()
+        private async Task LoadCargos()
         {
             // Agora utilizando o CargoRepository
-            var cargos = await _cargoRepo.ListarCargos();
+            var cargos = await _cargoRepo.FindAll();
             ddlCargo.DataSource = cargos;
             ddlCargo.DataValueField = "Id";
             ddlCargo.DataTextField = "Nome";
             ddlCargo.DataBind();
         }
 
-        private async Task CarregarPessoa()
+        private async Task LoadPessoa()
         {
             var pessoa = await _pessoaRepo.FindById(PessoaId.Value);
             if (pessoa != null)
