@@ -3,6 +3,20 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2 class="mb-4">Listagem de Salários</h2>
 
+    <div class="d-flex flex-column align-items-start gap-2">
+        <asp:HyperLink ID="btnBaixarRelatorio" runat="server"
+            NavigateUrl="~/RelatorioSalariosDownload.aspx"
+            Target="_blank"
+            CssClass="btn btn-success">
+        <i class="bi bi-download"></i> Baixar Relatório
+        </asp:HyperLink>
+
+        <small class="text-muted">Um relatório será baixado com base no cálculo mais recente de salários.
+        </small>
+    </div>
+
+
+
     <!-- UpdatePanel for async content -->
     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
@@ -13,7 +27,7 @@
                 <asp:Button ID="btnVerSalarios" runat="server" Text="Ver Salários"
                     OnClick="BtnVerSalarios_Click" CssClass="btn btn-secondary" OnClientClick="showLoading();" />
                 <!-- Button to Trigger Calculation -->
-                <asp:Button ID="btnCalcular" runat="server" Text="Calcular/Recalcular Salários"
+                <asp:Button ID="btnCalcular" runat="server" Text="Calcular Salários"
                     OnClick="BtnCalcular_Click" CssClass="btn btn-primary" OnClientClick="showLoading();" />
             </div>
 

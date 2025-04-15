@@ -160,6 +160,7 @@
     <Content Include="Content\pessoa-list.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Home.aspx" />
+    <Content Include="RelatorioSalariosDownload.aspx" />
     <Content Include="Salario.aspx" />
     <Content Include="PessoaForm.aspx" />
     <Content Include="favicon.ico" />
@@ -249,6 +250,13 @@
     </Compile>
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RelatorioSalariosDownload.aspx.cs">
+      <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RelatorioSalariosDownload.aspx.designer.cs">
+      <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
     </Compile>
     <Compile Include="Report\RelatorioSalarios.cs">
       <AutoGen>True</AutoGen>
