@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Data;
+using WebApplication1.Helpers;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
@@ -32,34 +33,19 @@ namespace WebApplication1
         private async Task LoadPessoas(int pageIndex, string filtroNome = "")
         {
             var pessoas = string.IsNullOrWhiteSpace(filtroNome)
-            ? await _pessoaService.FindAll()
-            : await _pessoaService.FindAllByNome(filtroNome);
+                ? await _pessoaService.FindAll()
+                : await _pessoaService.FindAllByNome(filtroNome);
 
-
-            gvPessoas.PageIndex = pageIndex;
-
-            if (pessoas.Count == 0)
-            {
-                gvPessoas.Visible = false;
-                lblSemResultados.Visible = true;
-                btnDeletarSelecionados.Visible = false;
-            }
-            else
-            {
-                gvPessoas.Visible = true;
-                lblSemResultados.Visible = false;
-                btnDeletarSelecionados.Visible = true;
-                gvPessoas.DataSource = pessoas;
-                gvPessoas.DataBind();
-            }
+            GridHelper.ExibirGridComPaginacao(gvPessoas, pessoas, pageIndex, lblSemResultados, btnDeletarSelecionados);
         }
 
 
         protected async void GvPessoas_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvPessoas.PageIndex = e.NewPageIndex; // Update the page index
-            await LoadPessoas(e.NewPageIndex, txtBuscaNome.Text.Trim());
+            await LoadPessoas(e.NewPageIndex, BuscaNome.TextoBuscado.Trim());
         }
+
 
 
         protected void BtnNovaPessoa_Click(object sender, EventArgs e)
@@ -91,14 +77,19 @@ namespace WebApplication1
 
         protected async void BtnBuscar_Click(object sender, EventArgs e)
         {
-            await LoadPessoas(0, txtBuscaNome.Text.Trim());
+            await LoadPessoas(0, BuscaNome.TextoBuscado.Trim());
         }
 
         protected async void TxtBuscaNome_TextChanged(object sender, EventArgs e)
         {
-            await LoadPessoas(0, txtBuscaNome.Text.Trim());
+            await LoadPessoas(0, BuscaNome.TextoBuscado.Trim());
         }
 
+
+        protected async void BuscaNome_BuscarTexto(object sender, string texto)
+        {
+            await LoadPessoas(0, texto);
+        }
 
     }
 }

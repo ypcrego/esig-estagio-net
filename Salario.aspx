@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="Salários" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Salario.aspx.cs" Inherits="WebApplication1.Salario" Async="true" %>
+<%@ Register TagPrefix="uc" TagName="BuscaTexto" Src="~/Controls/BuscaTexto.ascx" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2 class="mb-4">Listagem de Salários</h2>
@@ -37,15 +38,32 @@
                 <span class="ms-2">Aguarde...</span>
             </div>
 
+            <asp:Panel ID="painelBusca" runat="server" Visible="false">
+                <!-- Título da busca -->
+                <div class="text-center mt-5 mb-2">
+                    <h5 class="fw-bold">Buscar salário por nome de Pessoa</h5>
+                </div>
+
+                <!-- Barra de busca -->
+                <uc:BuscaTexto ID="BuscaNome" runat="server" OnBuscarTexto="BuscaNome_BuscarTexto" />
+            </asp:Panel>
+
+
             <!-- GridView (Hidden During Calculation) -->
             <div class="mt-4">
-                <asp:GridView ID="gvSalarios" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-responsive">
+                <asp:GridView ID="gvSalarios" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-responsive"
+                    AllowPaging="true" PageSize="10"
+                    OnPageIndexChanging="GvSalarios_PageIndexChanging">
                     <Columns>
                         <asp:BoundField DataField="pessoa_id" HeaderText="ID" />
                         <asp:BoundField DataField="pessoa_nome" HeaderText="Nome" />
                         <asp:BoundField DataField="cargo_nome" HeaderText="Cargo" />
                         <asp:BoundField DataField="salario" HeaderText="Salário" DataFormatString="{0:C}" />
                     </Columns>
+
+                    <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
+                    <PagerSettings Mode="NumericFirstLast" FirstPageText="«" LastPageText="»"
+                        NextPageText="›" PreviousPageText="‹" />
                 </asp:GridView>
             </div>
 

@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="Pessoas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PessoaList.aspx.cs" Inherits="WebApplication1.PessoaList" Async="true" %>
+<%@ Register TagPrefix="uc" TagName="BuscaTexto" Src="~/Controls/BuscaTexto.ascx" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -20,16 +21,8 @@
             </div>
 
             <!-- Barra de busca centralizada -->
-            <div class="d-flex text-center justify-content-center mt-4 mb-3">
-                <div class="input-group" style="width: 300px;">
-                    <asp:TextBox ID="txtBuscaNome" runat="server"
-                        CssClass="form-control"
-                        placeholder="Buscar por nome..."
-                        AutoPostBack="true"
-                        OnTextChanged="TxtBuscaNome_TextChanged" />
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                </div>
-            </div>
+            <uc:BuscaTexto ID="BuscaNome" runat="server" OnBuscarTexto="BuscaNome_BuscarTexto" />
+
 
 
             <!-- Lista de Pessoas -->

@@ -27,7 +27,7 @@ namespace WebApplication1
             string caminhoRelatorio = Server.MapPath("~/Report/RelatorioSalarios.rpt");
             rptDoc.Load(caminhoRelatorio);
 
-            DataTable dados = await _salarioService.ObterSalariosAsync();
+            DataTable dados = await _salarioService.FindAll();
             rptDoc.SetDataSource(dados);
 
             using (Stream stream = rptDoc.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat))

@@ -159,6 +159,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\pessoa-list.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Controls\BuscaTexto.ascx" />
     <Content Include="Home.aspx" />
     <Content Include="RelatorioSalariosDownload.aspx" />
     <Content Include="Salario.aspx" />
@@ -251,6 +252,14 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BuscaTexto.ascx.cs">
+      <DependentUpon>BuscaTexto.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\BuscaTexto.ascx.designer.cs">
+      <DependentUpon>BuscaTexto.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="RelatorioSalariosDownload.aspx.cs">
       <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

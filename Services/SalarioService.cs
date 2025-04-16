@@ -14,7 +14,7 @@ namespace WebApplication1.Services
             _connectionString = ConfigurationManager.ConnectionStrings["OracleDb"].ConnectionString;
         }
 
-        public async Task CalcularSalariosAsync()
+        public async Task CalcularSalarios()
         {
             using (OracleConnection conn = new OracleConnection(_connectionString))
             {
@@ -27,21 +27,47 @@ namespace WebApplication1.Services
             }
         }
 
-        public async Task<DataTable> ObterSalariosAsync()
+        public async Task<DataTable> FindAll()
         {
             using (OracleConnection conn = new OracleConnection(_connectionString))
             {
                 await conn.OpenAsync();
-                using (OracleCommand cmd = new OracleCommand("SELECT * FROM ESIG_ESTAGIO.pessoa_salario", conn))
+                using (OracleCommand cmd = new OracleCommand("SELECT * FROM pessoa_salario", conn))
                 {
                     using (OracleDataReader reader = await cmd.ExecuteReaderAsync())
                     {
-                        DataTable dt = new DataTable();
-                        dt.Load(reader);
-                        return dt;
+                        using (var dt = new DataTable())
+                        {
+                            dt.Load(reader);
+                            return dt;
+                        }
                     }
                 }
             }
         }
+
+        public async Task<DataTable> FindAllByPessoaNome(string nome)
+        {
+            using (OracleConnection conn = new OracleConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                using (OracleCommand cmd = new OracleCommand("SELECT * FROM pessoa_salario WHERE LOWER(pessoa_nome) LIKE :nome", conn))
+                {
+                    cmd.Parameters.Add(new OracleParameter("nome", $"%{nome.ToLower()}%"));
+
+                    using (OracleDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        using (var dt = new DataTable())
+                        {
+                            dt.Load(reader);
+                            return dt;
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 }

@@ -33,13 +33,13 @@ namespace WebApplication1
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
 
         /// <summary>
-        /// txtBuscaNome control.
+        /// BuscaNome control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBuscaNome;
+        protected global::WebApplication1.Controls.BuscaTexto BuscaNome;
 
         /// <summary>
         /// gvPessoas control.
