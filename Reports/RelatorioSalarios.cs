@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebApplication1.Report {
+namespace WebApplication1.Reports {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;
@@ -41,7 +41,7 @@ namespace WebApplication1.Report {
         
         public override string FullResourceName {
             get {
-                return "WebApplication1.Report.RelatorioSalarios.rpt";
+                return "WebApplication1.Reports.RelatorioSalarios.rpt";
             }
             set {
                 // Do nothing
