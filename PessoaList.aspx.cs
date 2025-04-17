@@ -58,6 +58,7 @@ namespace WebApplication1
 
                 lblSemResultados.Visible = lista.Count == 0;
                 btnDeletarSelecionados.Visible = lista.Count > 0;
+                painelBusca.Visible = lista.Count > 0;
             }
             catch (Exception ee)
             {

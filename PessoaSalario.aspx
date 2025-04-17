@@ -68,6 +68,14 @@
                         <asp:BoundField DataField="cargo_nome" HeaderText="Cargo" />
                         <asp:BoundField DataField="salario" HeaderText="Salário" DataFormatString="{0:C}" />
                     </Columns>
+
+                    <EmptyDataTemplate>
+                        <div class="alert alert-warning text-center mt-4">
+                            Nenhum registro foi encontrado. Tente calcular os salários.
+                        </div>
+                    </EmptyDataTemplate>
+
+
                     <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
                     <PagerSettings Mode="NumericFirstLast" FirstPageText="«" LastPageText="»"
                         NextPageText="›" PreviousPageText="‹" />

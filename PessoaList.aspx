@@ -18,13 +18,15 @@
         <ContentTemplate>
             <uc:Toast ID="ToastControl" runat="server" />
 
-            <!-- Título da busca -->
+            <asp:Panel ID="painelBusca" runat="server" Visible="false">
+                <!-- Título da busca -->
             <div class="text-center mt-5 mb-2">
                 <h5 class="fw-bold">Buscar pessoa por nome</h5>
             </div>
 
             <!-- Barra de busca centralizada -->
             <uc:BuscaTexto ID="BuscaNome" runat="server" OnBuscarTexto="BuscaNome_BuscarTexto" />
+            </asp:Panel>
 
 
 
@@ -66,6 +68,12 @@
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>
+
+                    <EmptyDataTemplate>
+                        <div class="alert alert-warning text-center mt-4">
+                            Nenhum registro foi encontrado. Tente cadastrar uma pessoa.
+                        </div>
+                    </EmptyDataTemplate>
 
                     <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
                     <PagerSettings Mode="NumericFirstLast" FirstPageText="«"

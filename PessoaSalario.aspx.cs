@@ -92,7 +92,7 @@ namespace WebApplication1
                 // Optionally, if you want to display total pages somewhere, calculate it:
                 int totalPages = (int)Math.Ceiling((double)totalRecords / gvSalarios.PageSize);
 
-                painelBusca.Visible = true;
+                painelBusca.Visible = lista.Count > 0;
             }
             catch (Exception ee)
             {
