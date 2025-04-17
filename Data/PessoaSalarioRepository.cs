@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Dtos;
 
-namespace WebApplication1.Services
+namespace WebApplication1.Data
 {
-    public class SalarioService
+    public class PessoaSalarioRepository
     {
         private readonly string _connectionString;
 
-        public SalarioService()
+        public PessoaSalarioRepository()
         {
             _connectionString = ConfigurationManager.ConnectionStrings["OracleDb"].ConnectionString;
         }
@@ -38,11 +38,9 @@ namespace WebApplication1.Services
                 {
                     using (OracleDataReader reader = await cmd.ExecuteReaderAsync())
                     {
-                        using (var dt = new DataTable())
-                        {
-                            dt.Load(reader);
-                            return dt;
-                        }
+                        var dt = new DataTable();
+                        dt.Load(reader);
+                        return dt;
                     }
                 }
             }
@@ -66,7 +64,6 @@ namespace WebApplication1.Services
             }
         }
 
-        // Paged method for all records:
         public async Task<PagedResult> FindPaged(int pageIndex, int pageSize)
         {
             int startRow = pageIndex * pageSize + 1;
@@ -76,7 +73,6 @@ namespace WebApplication1.Services
             {
                 await conn.OpenAsync();
 
-                // Query to fetch the paged result
                 string sql = @"
                     SELECT * FROM (
                         SELECT ps.*, ROW_NUMBER() OVER (ORDER BY pessoa_id) AS rn
@@ -94,7 +90,6 @@ namespace WebApplication1.Services
                         var dt = new DataTable();
                         dt.Load(reader);
 
-                        // Query for counting the total number of records
                         string countSql = "SELECT COUNT(*) FROM pessoa_salario";
                         using (OracleCommand countCmd = new OracleCommand(countSql, conn))
                         {
@@ -110,7 +105,6 @@ namespace WebApplication1.Services
             }
         }
 
-        // Paged method for filtered records by pessoa_nome:
         public async Task<PagedResult> FindPagedByPessoaNome(string nome, int pageIndex, int pageSize)
         {
             int startRow = pageIndex * pageSize + 1;
@@ -139,7 +133,6 @@ namespace WebApplication1.Services
                         var dt = new DataTable();
                         dt.Load(reader);
 
-                        // Now count total records for the given filter
                         string countSql = "SELECT COUNT(*) FROM pessoa_salario WHERE LOWER(pessoa_nome) LIKE :nome";
                         using (OracleCommand countCmd = new OracleCommand(countSql, conn))
                         {

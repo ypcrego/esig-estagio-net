@@ -11,7 +11,7 @@ namespace WebApplication1
 {
     public partial class Salario : System.Web.UI.Page
     {
-        private readonly SalarioService _salarioService = new SalarioService();
+        private readonly PessoaSalarioService _salarioService = new PessoaSalarioService();
 
         protected void Page_Load(object sender, EventArgs e)
         {
