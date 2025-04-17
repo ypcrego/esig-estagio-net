@@ -49,23 +49,23 @@
             </asp:Panel>
 
 
-            <!-- GridView (Hidden During Calculation) -->
-            <div class="mt-4">
-                <asp:GridView ID="gvSalarios" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-responsive"
-                    AllowPaging="true" PageSize="10"
-                    OnPageIndexChanging="GvSalarios_PageIndexChanging">
-                    <Columns>
-                        <asp:BoundField DataField="pessoa_id" HeaderText="ID" />
-                        <asp:BoundField DataField="pessoa_nome" HeaderText="Nome" />
-                        <asp:BoundField DataField="cargo_nome" HeaderText="Cargo" />
-                        <asp:BoundField DataField="salario" HeaderText="Salário" DataFormatString="{0:C}" />
-                    </Columns>
+                <!-- GridView (Hidden During Calculation) -->
+                <div class="mt-4">
+                    <asp:GridView ID="gvSalarios" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-responsive"
+                        AllowPaging="true" AllowCustomPaging="true" PageSize="10"
+                        OnPageIndexChanging="GvSalarios_PageIndexChanging">
+                        <Columns>
+                            <asp:BoundField DataField="pessoa_id" HeaderText="ID" />
+                            <asp:BoundField DataField="pessoa_nome" HeaderText="Nome" />
+                            <asp:BoundField DataField="cargo_nome" HeaderText="Cargo" />
+                            <asp:BoundField DataField="salario" HeaderText="Salário" DataFormatString="{0:C}" />
+                        </Columns>
+                        <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
+                        <PagerSettings Mode="NumericFirstLast" FirstPageText="«" LastPageText="»"
+                            NextPageText="›" PreviousPageText="‹" />
+                    </asp:GridView>
+                </div>
 
-                    <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
-                    <PagerSettings Mode="NumericFirstLast" FirstPageText="«" LastPageText="»"
-                        NextPageText="›" PreviousPageText="‹" />
-                </asp:GridView>
-            </div>
 
         </ContentTemplate>
         <Triggers>

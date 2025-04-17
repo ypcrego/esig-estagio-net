@@ -28,7 +28,7 @@
             <!-- Lista de Pessoas -->
             <div class="mt-3">
                 <asp:GridView ID="gvPessoas" runat="server"
-                    AllowPaging="true" PageSize="10"
+                    AllowPaging="true" AllowCustomPaging="true" PageSize="10"
                     CssClass="table table-striped table-bordered"
                     AutoGenerateColumns="False"
                     OnPageIndexChanging="GvPessoas_PageIndexChanging"

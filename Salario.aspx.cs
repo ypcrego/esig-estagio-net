@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using WebApplication1.Helpers;
+using WebApplication1.Dtos;
 using WebApplication1.Services;
 
 namespace WebApplication1
@@ -51,21 +51,24 @@ namespace WebApplication1
             string textoBuscado = BuscaNome.TextoBuscado.Trim();
 
             RegisterAsyncTask(new PageAsyncTask(() => CarregarSalariosAsync(e.NewPageIndex, textoBuscado)));
-         }
+        }
 
 
         private async Task CarregarSalariosAsync(int pageIndex = 0, string filtroNome = "")
         {
-            DataTable salarios;
+            PagedResult result;
 
             if (string.IsNullOrWhiteSpace(filtroNome))
             {
-                salarios = await _salarioService.FindAll();
+                result = await _salarioService.FindPaged(pageIndex, gvSalarios.PageSize);
             }
             else
             {
-                salarios = await _salarioService.FindAllByPessoaNome(filtroNome);
+                result = await _salarioService.FindPagedByPessoaNome(filtroNome, pageIndex, gvSalarios.PageSize);
             }
+
+            DataTable salarios = result.Data;
+            int totalRecords = result.TotalRecords;
 
             var lista = salarios.AsEnumerable()
                                 .Select(row => new
@@ -77,9 +80,20 @@ namespace WebApplication1
                                 })
                                 .ToList();
 
-            GridHelper.ExibirGridComPaginacao(gvSalarios, lista, pageIndex);
+            // Set the VirtualItemCount so that the GridView's built-in pager knows the total record count.
+            gvSalarios.VirtualItemCount = totalRecords;
+
+            // Bind the partial data to the GridView.
+            gvSalarios.PageIndex = pageIndex;
+            gvSalarios.DataSource = lista;
+            gvSalarios.DataBind();
+
+            // Optionally, if you want to display total pages somewhere, calculate it:
+            int totalPages = (int)Math.Ceiling((double)totalRecords / gvSalarios.PageSize);
+
             painelBusca.Visible = true;
         }
+
 
         protected async void BtnBuscar_Click(object sender, EventArgs e)
         {

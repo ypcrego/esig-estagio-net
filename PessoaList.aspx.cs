@@ -7,7 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using WebApplication1.Data;
-using WebApplication1.Helpers;
+using WebApplication1.Dtos;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
@@ -32,11 +32,30 @@ namespace WebApplication1
 
         private async Task LoadPessoas(int pageIndex, string filtroNome = "")
         {
-            var pessoas = string.IsNullOrWhiteSpace(filtroNome)
-                ? await _pessoaService.FindAll()
-                : await _pessoaService.FindAllByNome(filtroNome);
+            PagedResult result;
 
-            GridHelper.ExibirGridComPaginacao(gvPessoas, pessoas, pageIndex, lblSemResultados, btnDeletarSelecionados);
+            if (string.IsNullOrWhiteSpace(filtroNome))
+                result = await _pessoaService.FindAllPaged(pageIndex, gvPessoas.PageSize);
+            else
+                result = await _pessoaService.FindByNomePaged(filtroNome, pageIndex, gvPessoas.PageSize);
+
+            var lista = result.Data.AsEnumerable()
+                .Select(row => new Pessoa
+                {
+                    Id = Convert.ToInt32(row["ID"]),
+                    Nome = row["NOME"].ToString(),
+                    Cidade = row["CIDADE"].ToString(),
+                    Email = row["EMAIL"].ToString(),
+                    Telefone = row["TELEFONE"].ToString()
+                }).ToList();
+
+            gvPessoas.VirtualItemCount = result.TotalRecords;
+            gvPessoas.PageIndex = pageIndex;
+            gvPessoas.DataSource = lista;
+            gvPessoas.DataBind();
+
+            lblSemResultados.Visible = lista.Count == 0;
+            btnDeletarSelecionados.Visible = lista.Count > 0;
         }
 
 
@@ -72,7 +91,7 @@ namespace WebApplication1
                     _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
                 }
             }
-           await LoadPessoas(gvPessoas.PageIndex); ;
+            await LoadPessoas(gvPessoas.PageIndex); ;
         }
 
         protected async void BtnBuscar_Click(object sender, EventArgs e)

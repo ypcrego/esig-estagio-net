@@ -259,7 +259,7 @@
     <Compile Include="Controls\BuscaTexto.ascx.designer.cs">
       <DependentUpon>BuscaTexto.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\GridHelper.cs" />
+    <Compile Include="Dtos\PagedResult.cs" />
     <Compile Include="RelatorioSalariosDownload.aspx.cs">
       <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -335,6 +335,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Helpers\" />
     <Folder Include="Pages\" />
     <Folder Include="Utils\" />
   </ItemGroup>

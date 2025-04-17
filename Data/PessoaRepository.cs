@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
+using WebApplication1.Dtos;
 using WebApplication1.Models;
 
 namespace WebApplication1.Data
@@ -90,7 +92,7 @@ namespace WebApplication1.Data
             return pessoas;
         }
 
-        public async Task<List<Pessoa>> FindAllByNome(string nome)
+        public async Task<List<Pessoa>> FindByNome(string nome)
         {
             var lista = new List<Pessoa>();
 
@@ -117,6 +119,93 @@ namespace WebApplication1.Data
                 }
 
                 return lista;
+            }
+        }
+
+        public async Task<PagedResult> FindAllPaged(int pageIndex, int pageSize)
+        {
+            int startRow = pageIndex * pageSize + 1;
+            int endRow = (pageIndex + 1) * pageSize;
+
+            using (var conn = new OracleConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                string sql = @"
+            SELECT * FROM (
+                SELECT p.*, ROW_NUMBER() OVER (ORDER BY id) AS rn
+                FROM pessoa p
+            )
+            WHERE rn BETWEEN :startRow AND :endRow";
+
+                using (var cmd = new OracleCommand(sql, conn))
+                {
+                    cmd.Parameters.Add(new OracleParameter("startRow", startRow));
+                    cmd.Parameters.Add(new OracleParameter("endRow", endRow));
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        var dt = new DataTable();
+                        dt.Load(reader);
+
+                        string countSql = "SELECT COUNT(*) FROM pessoa";
+                        using (var countCmd = new OracleCommand(countSql, conn))
+                        {
+                            int total = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
+
+                            return new PagedResult
+                            {
+                                Data = dt,
+                                TotalRecords = total
+                            };
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task<PagedResult> FindByNomePaged(string nome, int pageIndex, int pageSize)
+        {
+            int startRow = pageIndex * pageSize + 1;
+            int endRow = (pageIndex + 1) * pageSize;
+
+            using (var conn = new OracleConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                string sql = @"
+            SELECT * FROM (
+                SELECT p.*, ROW_NUMBER() OVER (ORDER BY id) AS rn
+                FROM pessoa p
+                WHERE LOWER(nome) LIKE :nome
+            )
+            WHERE rn BETWEEN :startRow AND :endRow";
+
+                using (var cmd = new OracleCommand(sql, conn))
+                {
+                    cmd.Parameters.Add(new OracleParameter("nome", $"%{nome.ToLower()}%"));
+                    cmd.Parameters.Add(new OracleParameter("startRow", startRow));
+                    cmd.Parameters.Add(new OracleParameter("endRow", endRow));
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        var dt = new DataTable();
+                        dt.Load(reader);
+
+                        string countSql = "SELECT COUNT(*) FROM pessoa WHERE LOWER(nome) LIKE :nome";
+                        using (var countCmd = new OracleCommand(countSql, conn))
+                        {
+                            countCmd.Parameters.Add(new OracleParameter("nome", $"%{nome.ToLower()}%"));
+                            int total = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
+
+                            return new PagedResult
+                            {
+                                Data = dt,
+                                TotalRecords = total
+                            };
+                        }
+                    }
+                }
             }
         }
 
