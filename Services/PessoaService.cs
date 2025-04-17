@@ -27,14 +27,13 @@ namespace WebApplication1.Services
 
         public async Task<PagedResult> FindAllPaged(int pageIndex, int pageSize)
         {
-            var repo = new PessoaRepository();
-            return await repo.FindAllPaged(pageIndex, pageSize);
+            return await _pessoaRepo.FindAllPaged(pageIndex, pageSize);
         }
 
         public async Task<PagedResult> FindByNomePaged(string nome, int pageIndex, int pageSize)
         {
             var repo = new PessoaRepository();
-            return await repo.FindByNomePaged(nome, pageIndex, pageSize);
+            return await _pessoaRepo.FindByNomePaged(nome, pageIndex, pageSize);
         }
 
 
