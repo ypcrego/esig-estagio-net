@@ -1,10 +1,17 @@
 ﻿<%@ Page Title="Salários" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PessoaSalario.aspx.cs" Inherits="WebApplication1.Salario" Async="true" %>
+
 <%@ Register TagPrefix="uc" TagName="BuscaTexto" Src="~/Controls/BuscaTexto.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Toast" Src="~/controls/Toast.ascx" %>
+
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+
+
     <h2 class="mb-4">Listagem de Salários</h2>
 
-    <div class="d-flex flex-column align-items-start gap-2">
+
+    <div class="d-flex flex-column align-items-start gap-2 mb-4">
         <asp:HyperLink ID="btnBaixarRelatorio" runat="server"
             NavigateUrl="~/RelatorioSalariosDownload.aspx"
             Target="_blank"
@@ -21,6 +28,7 @@
     <!-- UpdatePanel for async content -->
     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
+            <uc:Toast ID="ToastControl" runat="server" />
 
             <!-- Buttons for "Ver Salários" and "Calcular Salários" -->
             <div class="d-flex flex-row justify-content-center gap-3">
@@ -49,22 +57,22 @@
             </asp:Panel>
 
 
-                <!-- GridView (Hidden During Calculation) -->
-                <div class="mt-4">
-                    <asp:GridView ID="gvSalarios" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-responsive"
-                        AllowPaging="true" AllowCustomPaging="true" PageSize="10"
-                        OnPageIndexChanging="GvSalarios_PageIndexChanging">
-                        <Columns>
-                            <asp:BoundField DataField="pessoa_id" HeaderText="ID" />
-                            <asp:BoundField DataField="pessoa_nome" HeaderText="Nome" />
-                            <asp:BoundField DataField="cargo_nome" HeaderText="Cargo" />
-                            <asp:BoundField DataField="salario" HeaderText="Salário" DataFormatString="{0:C}" />
-                        </Columns>
-                        <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
-                        <PagerSettings Mode="NumericFirstLast" FirstPageText="«" LastPageText="»"
-                            NextPageText="›" PreviousPageText="‹" />
-                    </asp:GridView>
-                </div>
+            <!-- GridView (Hidden During Calculation) -->
+            <div class="mt-4">
+                <asp:GridView ID="gvSalarios" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-responsive"
+                    AllowPaging="true" AllowCustomPaging="true" PageSize="10"
+                    OnPageIndexChanging="GvSalarios_PageIndexChanging">
+                    <Columns>
+                        <asp:BoundField DataField="pessoa_id" HeaderText="ID" />
+                        <asp:BoundField DataField="pessoa_nome" HeaderText="Nome" />
+                        <asp:BoundField DataField="cargo_nome" HeaderText="Cargo" />
+                        <asp:BoundField DataField="salario" HeaderText="Salário" DataFormatString="{0:C}" />
+                    </Columns>
+                    <PagerStyle CssClass="GridPager" HorizontalAlign="Center" />
+                    <PagerSettings Mode="NumericFirstLast" FirstPageText="«" LastPageText="»"
+                        NextPageText="›" PreviousPageText="‹" />
+                </asp:GridView>
+            </div>
 
 
         </ContentTemplate>
@@ -101,7 +109,10 @@
             btnCalcular.style.cursor = "not-allowed";
 
             // Hide the table
-            document.getElementById("<%= gvSalarios.ClientID %>").classList.add("d-none");
+            var gvSalarios = document.getElementById("<%= gvSalarios.ClientID %>");
+            if (gvSalarios) {
+                gvSalarios.classList.add("d-none");
+            }
 
             return true;
         }
@@ -123,7 +134,10 @@
 
             isLoading = false;
 
-            document.getElementById("<%= gvSalarios.ClientID %>").classList.remove("d-none");
+            var gvSalarios = document.getElementById("<%= gvSalarios.ClientID %>");
+            if (gvSalarios) {
+                gvSalarios.classList.remove("d-none");
+            }
         }
     </script>
 </asp:Content>

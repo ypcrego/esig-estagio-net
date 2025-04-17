@@ -158,13 +158,14 @@
     <Content Include="Content\pessoa-list.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Controls\BuscaTexto.ascx" />
-    <Content Include="Pages\Home.aspx" />
-    <Content Include="Pages\RelatorioSalariosDownload.aspx" />
-    <Content Include="Pages\PessoaSalario.aspx" />
-    <Content Include="Pages\PessoaForm.aspx" />
+    <Content Include="Controls\Toast.ascx" />
+    <Content Include="Home.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Pages\PessoaList.aspx" />
+    <Content Include="PessoaForm.aspx" />
+    <Content Include="PessoaList.aspx" />
+    <Content Include="PessoaSalario.aspx" />
+    <Content Include="RelatorioSalariosDownload.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -243,12 +244,48 @@
     <Compile Include="Controls\BuscaTexto.ascx.designer.cs">
       <DependentUpon>BuscaTexto.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Toast.ascx.cs">
+      <DependentUpon>Toast.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Toast.ascx.designer.cs">
+      <DependentUpon>Toast.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Data\PessoaSalarioRepository.cs" />
     <Compile Include="Dtos\PagedResult.cs" />
-    <Compile Include="Pages\RelatorioSalariosDownload.aspx.cs">
-      <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
+    <Compile Include="Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\RelatorioSalariosDownload.aspx.designer.cs">
+    <Compile Include="Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaForm.aspx.cs">
+      <DependentUpon>PessoaForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PessoaForm.aspx.designer.cs">
+      <DependentUpon>PessoaForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaList.aspx.cs">
+      <DependentUpon>PessoaList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PessoaList.aspx.designer.cs">
+      <DependentUpon>PessoaList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaSalario.aspx.cs">
+      <DependentUpon>PessoaSalario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PessoaSalario.aspx.designer.cs">
+      <DependentUpon>PessoaSalario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RelatorioSalariosDownload.aspx.cs">
+      <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RelatorioSalariosDownload.aspx.designer.cs">
       <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\RelatorioSalarios.cs">
@@ -259,34 +296,10 @@
     </Compile>
     <Compile Include="Data\CargoRepository.cs" />
     <Compile Include="Data\PessoaRepository.cs" />
-    <Compile Include="Pages\Home.aspx.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Home.aspx.designer.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PessoaSalario.aspx.cs">
-      <DependentUpon>PessoaSalario.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PessoaSalario.aspx.designer.cs">
-      <DependentUpon>PessoaSalario.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Models\Cargo.cs" />
     <Compile Include="Models\Pessoa.cs" />
-    <Compile Include="Pages\PessoaForm.aspx.cs">
-      <DependentUpon>PessoaForm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PessoaForm.aspx.designer.cs">
-      <DependentUpon>PessoaForm.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PessoaList.aspx.cs">
-      <DependentUpon>PessoaList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PessoaList.aspx.designer.cs">
-      <DependentUpon>PessoaList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\PessoaService.cs" />

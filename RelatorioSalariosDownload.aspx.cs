@@ -24,7 +24,7 @@ namespace WebApplication1
         private async Task GerarRelatorio()
         {
             ReportDocument rptDoc = new ReportDocument();
-            string caminhoRelatorio = Server.MapPath("~/Report/RelatorioSalarios.rpt");
+            string caminhoRelatorio = Server.MapPath("~/Reports/RelatorioSalarios.rpt");
             rptDoc.Load(caminhoRelatorio);
 
             DataTable dados = await _salarioService.FindAll();

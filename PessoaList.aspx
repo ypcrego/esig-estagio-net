@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="Pessoas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PessoaList.aspx.cs" Inherits="WebApplication1.PessoaList" Async="true" %>
+
 <%@ Register TagPrefix="uc" TagName="BuscaTexto" Src="~/Controls/BuscaTexto.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Toast" Src="~/controls/Toast.ascx" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -14,6 +16,7 @@
 
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
+            <uc:Toast ID="ToastControl" runat="server" />
 
             <!-- Título da busca -->
             <div class="text-center mt-5 mb-2">

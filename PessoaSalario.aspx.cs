@@ -15,10 +15,6 @@ namespace WebApplication1
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                // Nada por enquanto
-            }
         }
 
         protected void BtnCalcular_Click(object sender, EventArgs e)
@@ -35,14 +31,16 @@ namespace WebApplication1
 
         private async Task ExecuteCalculation()
         {
-            DateTime start = DateTime.Now;
-
-            await _salarioService.CalcularSalarios();
-            await CarregarSalariosAsync();
-
-            DateTime end = DateTime.Now;
-            TimeSpan duration = end - start;
-            System.Diagnostics.Debug.WriteLine($"Query duration: {duration.TotalSeconds} seconds");
+            try
+            {
+                await _salarioService.CalcularSalarios();
+                await CarregarSalariosAsync();
+            }
+            catch (Exception ee)
+            {
+                ToastControl.ShowError(ee.Message);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
+            }
         }
 
         protected void GvSalarios_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -56,43 +54,54 @@ namespace WebApplication1
 
         private async Task CarregarSalariosAsync(int pageIndex = 0, string filtroNome = "")
         {
-            PagedResult result;
 
-            if (string.IsNullOrWhiteSpace(filtroNome))
+            try
             {
-                result = await _salarioService.FindPaged(pageIndex, gvSalarios.PageSize);
+                PagedResult result;
+
+                if (string.IsNullOrWhiteSpace(filtroNome))
+                {
+                    result = await _salarioService.FindPaged(pageIndex, gvSalarios.PageSize);
+                }
+                else
+                {
+                    result = await _salarioService.FindPagedByPessoaNome(filtroNome, pageIndex, gvSalarios.PageSize);
+                }
+
+                DataTable salarios = result.Data;
+                int totalRecords = result.TotalRecords;
+
+                var lista = salarios.AsEnumerable()
+                                    .Select(row => new
+                                    {
+                                        pessoa_id = row["pessoa_id"],
+                                        pessoa_nome = row["pessoa_nome"],
+                                        cargo_nome = row["cargo_nome"],
+                                        salario = row["salario"]
+                                    })
+                                    .ToList();
+
+                // Set the VirtualItemCount so that the GridView's built-in pager knows the total record count.
+                gvSalarios.VirtualItemCount = totalRecords;
+
+                // Bind the partial data to the GridView.
+                gvSalarios.PageIndex = pageIndex;
+                gvSalarios.DataSource = lista;
+                gvSalarios.DataBind();
+
+                // Optionally, if you want to display total pages somewhere, calculate it:
+                int totalPages = (int)Math.Ceiling((double)totalRecords / gvSalarios.PageSize);
+
+                painelBusca.Visible = true;
             }
-            else
+            catch (Exception ee)
             {
-                result = await _salarioService.FindPagedByPessoaNome(filtroNome, pageIndex, gvSalarios.PageSize);
+                // Exibe mensagem de erro e oculta spinner
+                ToastControl.ShowError(ee.Message);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
             }
-
-            DataTable salarios = result.Data;
-            int totalRecords = result.TotalRecords;
-
-            var lista = salarios.AsEnumerable()
-                                .Select(row => new
-                                {
-                                    pessoa_id = row["pessoa_id"],
-                                    pessoa_nome = row["pessoa_nome"],
-                                    cargo_nome = row["cargo_nome"],
-                                    salario = row["salario"]
-                                })
-                                .ToList();
-
-            // Set the VirtualItemCount so that the GridView's built-in pager knows the total record count.
-            gvSalarios.VirtualItemCount = totalRecords;
-
-            // Bind the partial data to the GridView.
-            gvSalarios.PageIndex = pageIndex;
-            gvSalarios.DataSource = lista;
-            gvSalarios.DataBind();
-
-            // Optionally, if you want to display total pages somewhere, calculate it:
-            int totalPages = (int)Math.Ceiling((double)totalRecords / gvSalarios.PageSize);
-
-            painelBusca.Visible = true;
         }
+
 
 
         protected async void BtnBuscar_Click(object sender, EventArgs e)

@@ -8,7 +8,7 @@
 
         <div class="row justify-content-center">
             <div class="col-md-4">
-                <a class="btn btn-success btn-lg btn-block" href="Salario.aspx" role="button">Ver Salários</a>
+                <a class="btn btn-success btn-lg btn-block" href="PessoaSalario.aspx" role="button">Ver Salários</a>
             </div>
             <div class="col-md-4">
                 <a class="btn btn-primary btn-lg btn-block" href="PessoaList.aspx" role="button">Gerenciar Pessoas</a>

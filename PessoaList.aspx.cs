@@ -32,30 +32,38 @@ namespace WebApplication1
 
         private async Task LoadPessoas(int pageIndex, string filtroNome = "")
         {
-            PagedResult result;
+            try
+            {
+                PagedResult result;
 
-            if (string.IsNullOrWhiteSpace(filtroNome))
-                result = await _pessoaService.FindAllPaged(pageIndex, gvPessoas.PageSize);
-            else
-                result = await _pessoaService.FindByNomePaged(filtroNome, pageIndex, gvPessoas.PageSize);
+                if (string.IsNullOrWhiteSpace(filtroNome))
+                    result = await _pessoaService.FindAllPaged(pageIndex, gvPessoas.PageSize);
+                else
+                    result = await _pessoaService.FindByNomePaged(filtroNome, pageIndex, gvPessoas.PageSize);
 
-            var lista = result.Data.AsEnumerable()
-                .Select(row => new Pessoa
-                {
-                    Id = Convert.ToInt32(row["ID"]),
-                    Nome = row["NOME"].ToString(),
-                    Cidade = row["CIDADE"].ToString(),
-                    Email = row["EMAIL"].ToString(),
-                    Telefone = row["TELEFONE"].ToString()
-                }).ToList();
+                var lista = result.Data.AsEnumerable()
+                    .Select(row => new Pessoa
+                    {
+                        Id = Convert.ToInt32(row["ID"]),
+                        Nome = row["NOME"].ToString(),
+                        Cidade = row["CIDADE"].ToString(),
+                        Email = row["EMAIL"].ToString(),
+                        Telefone = row["TELEFONE"].ToString()
+                    }).ToList();
 
-            gvPessoas.VirtualItemCount = result.TotalRecords;
-            gvPessoas.PageIndex = pageIndex;
-            gvPessoas.DataSource = lista;
-            gvPessoas.DataBind();
+                gvPessoas.VirtualItemCount = result.TotalRecords;
+                gvPessoas.PageIndex = pageIndex;
+                gvPessoas.DataSource = lista;
+                gvPessoas.DataBind();
 
-            lblSemResultados.Visible = lista.Count == 0;
-            btnDeletarSelecionados.Visible = lista.Count > 0;
+                lblSemResultados.Visible = lista.Count == 0;
+                btnDeletarSelecionados.Visible = lista.Count > 0;
+            }
+            catch (Exception ee)
+            {
+                ToastControl.ShowError(ee.Message);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
+            }
         }
 
 
@@ -74,24 +82,40 @@ namespace WebApplication1
 
         protected async void GvPessoas_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[e.RowIndex].Value);
-            _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
-            await LoadPessoas(gvPessoas.PageIndex); ;
+            try
+            {
+                int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[e.RowIndex].Value);
+                _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
+                await LoadPessoas(gvPessoas.PageIndex);
+            }
+            catch (Exception ee)
+            {
+                ToastControl.ShowError(ee.Message);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
+            }
         }
 
         // Deletar as pessoas selecionadas
         protected async void BtnDeletarSelecionados_Click(object sender, EventArgs e)
         {
-            foreach (GridViewRow row in gvPessoas.Rows)
+            try
             {
-                var chkSelecionar = (CheckBox)row.FindControl("chkSelecionar");
-                if (chkSelecionar?.Checked == true)
+                foreach (GridViewRow row in gvPessoas.Rows)
                 {
-                    int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[row.RowIndex].Value);
-                    _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
+                    var chkSelecionar = (CheckBox)row.FindControl("chkSelecionar");
+                    if (chkSelecionar?.Checked == true)
+                    {
+                        int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[row.RowIndex].Value);
+                        _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
+                    }
                 }
+                await LoadPessoas(gvPessoas.PageIndex);
             }
-            await LoadPessoas(gvPessoas.PageIndex); ;
+            catch (Exception ee)
+            {
+                ToastControl.ShowError(ee.Message);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
+            }
         }
 
         protected async void BtnBuscar_Click(object sender, EventArgs e)

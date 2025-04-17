@@ -31,12 +31,20 @@ namespace WebApplication1
 
         private async Task LoadCargos()
         {
-            // Agora utilizando o CargoRepository
-            var cargos = await _cargoRepo.FindAll();
-            ddlCargo.DataSource = cargos;
-            ddlCargo.DataValueField = "Id";
-            ddlCargo.DataTextField = "Nome";
-            ddlCargo.DataBind();
+            try
+            {
+                // Agora utilizando o CargoRepository
+                var cargos = await _cargoRepo.FindAll();
+                ddlCargo.DataSource = cargos;
+                ddlCargo.DataValueField = "Id";
+                ddlCargo.DataTextField = "Nome";
+                ddlCargo.DataBind();
+            }
+            catch (Exception ee)
+            {
+                ToastControl.ShowError(ee.Message);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
+            }
         }
 
         private async Task LoadPessoa()
@@ -66,28 +74,36 @@ namespace WebApplication1
         {
             if (!Page.IsValid) return;
 
-            var pessoa = new Pessoa
+            try
             {
-                Nome = txtNome.Text,
-                Cidade = txtCidade.Text,
-                Email = txtEmail.Text,
-                Cep = txtCEP.Text,
-                Endereco = txtEndereco.Text,
-                Pais = txtPais.Text,
-                Usuario = txtUsuario.Text,
-                Telefone = txtTelefone.Text,
-                DataNascimento = DateTime.Parse(txtDataNascimento.Text),
-                CargoId = int.Parse(ddlCargo.SelectedValue)
-            };
+                var pessoa = new Pessoa
+                {
+                    Nome = txtNome.Text,
+                    Cidade = txtCidade.Text,
+                    Email = txtEmail.Text,
+                    Cep = txtCEP.Text,
+                    Endereco = txtEndereco.Text,
+                    Pais = txtPais.Text,
+                    Usuario = txtUsuario.Text,
+                    Telefone = txtTelefone.Text,
+                    DataNascimento = DateTime.Parse(txtDataNascimento.Text),
+                    CargoId = int.Parse(ddlCargo.SelectedValue)
+                };
 
-            if (IsEdicao)
-            {
-                pessoa.Id = PessoaId.Value;
-                await _pessoaRepo.Update(pessoa);
+                if (IsEdicao)
+                {
+                    pessoa.Id = PessoaId.Value;
+                    await _pessoaRepo.Update(pessoa);
+                }
+                else
+                {
+                    await _pessoaRepo.Add(pessoa);
+                }
             }
-            else
+            catch (Exception ee)
             {
-                await _pessoaRepo.Add(pessoa);
+                ToastControl.ShowError(ee.Message);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideLoading", "hideLoading();", true);
             }
 
             Response.Redirect("PessoaList.aspx", false);
