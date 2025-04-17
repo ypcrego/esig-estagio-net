@@ -88,8 +88,6 @@
                 <asp:DropDownList ID="ddlCargo" runat="server" CssClass="form-select" AppendDataBoundItems="True">
                     <asp:ListItem Text="Selecione um cargo..." Value="" />
                 </asp:DropDownList>
-                <asp:RequiredFieldValidator ID="rfvCargo" runat="server" ControlToValidate="ddlCargo"
-                    InitialValue="" ErrorMessage="Selecione um cargo" CssClass="text-danger" Display="Dynamic" />
             </div>
         </div>
 

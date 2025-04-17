@@ -61,7 +61,8 @@ namespace WebApplication1
                 txtUsuario.Text = pessoa.Usuario;
                 txtTelefone.Text = pessoa.Telefone;
                 txtDataNascimento.Text = pessoa.DataNascimento.ToString("yyyy-MM-dd");
-                ddlCargo.SelectedValue = pessoa.CargoId.ToString();
+                if (pessoa.CargoId != 0) 
+                    ddlCargo.SelectedValue = pessoa.CargoId.ToString();
             }
             else
             {
@@ -87,7 +88,7 @@ namespace WebApplication1
                     Usuario = txtUsuario.Text,
                     Telefone = txtTelefone.Text,
                     DataNascimento = DateTime.Parse(txtDataNascimento.Text),
-                    CargoId = int.Parse(ddlCargo.SelectedValue)
+                    CargoId = string.IsNullOrEmpty(ddlCargo.SelectedValue) ? (int?)null : int.Parse(ddlCargo.SelectedValue)
                 };
 
                 if (IsEdicao)

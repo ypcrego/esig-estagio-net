@@ -48,7 +48,7 @@ namespace WebApplication1.Data
                             Usuario = reader["usuario"].ToString(),
                             Telefone = reader["telefone"].ToString(),
                             DataNascimento = Convert.ToDateTime(reader["DATA_NASCIMENTO"]),
-                            CargoId = Convert.ToInt32(reader["cargo_id"])
+                            CargoId = reader["CARGO_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(reader["CARGO_ID"])
                         };
                     }
                 }
@@ -83,7 +83,7 @@ namespace WebApplication1.Data
                             Usuario = reader["USUARIO"].ToString(),
                             Telefone = reader["TELEFONE"].ToString(),
                             DataNascimento = Convert.ToDateTime(reader["DATA_NASCIMENTO"]),
-                            CargoId = Convert.ToInt32(reader["CARGO_ID"])
+                            CargoId = reader["CARGO_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(reader["CARGO_ID"])
                         });
                     }
                 }
@@ -281,7 +281,7 @@ namespace WebApplication1.Data
             cmd.Parameters.Add(":usuario", pessoa.Usuario);
             cmd.Parameters.Add(":telefone", pessoa.Telefone);
             cmd.Parameters.Add(":dataNascimento", pessoa.DataNascimento);
-            cmd.Parameters.Add(":cargo", pessoa.CargoId);
+            cmd.Parameters.Add(":cargo", pessoa.CargoId.HasValue ? (object)pessoa.CargoId.Value : DBNull.Value);
         }
 
 

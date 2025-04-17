@@ -17,6 +17,6 @@ namespace WebApplication1.Models
         public string Usuario { get; set; }
         public string Telefone { get; set; }
         public DateTime DataNascimento { get; set; }
-        public int CargoId { get; set; }
+        public int? CargoId { get; set; }
     }
 }

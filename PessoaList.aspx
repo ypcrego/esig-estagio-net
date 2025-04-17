@@ -91,7 +91,7 @@
                 <!-- Botão Deletar Selecionados -->
                 <div class="mt-4">
                     <asp:Button ID="btnDeletarSelecionados" runat="server" Text="Deletar Selecionados"
-                        CssClass="btn btn-danger"
+                        CssClass="btn btn-danger" 
                         OnClick="BtnDeletarSelecionados_Click" />
                 </div>
 
