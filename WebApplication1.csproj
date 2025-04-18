@@ -162,10 +162,10 @@
     <Content Include="Home.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="PessoaForm.aspx" />
-    <Content Include="PessoaList.aspx" />
-    <Content Include="PessoaSalario.aspx" />
-    <Content Include="RelatorioSalariosDownload.aspx" />
+    <Content Include="Pages\PessoaForm.aspx" />
+    <Content Include="Pages\PessoaList.aspx" />
+    <Content Include="Pages\PessoaSalario.aspx" />
+    <Content Include="Pages\RelatorioSalariosDownload.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -260,32 +260,32 @@
     <Compile Include="Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PessoaForm.aspx.cs">
+    <Compile Include="Pages\PessoaForm.aspx.cs">
       <DependentUpon>PessoaForm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PessoaForm.aspx.designer.cs">
+    <Compile Include="Pages\PessoaForm.aspx.designer.cs">
       <DependentUpon>PessoaForm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PessoaList.aspx.cs">
+    <Compile Include="Pages\PessoaList.aspx.cs">
       <DependentUpon>PessoaList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PessoaList.aspx.designer.cs">
+    <Compile Include="Pages\PessoaList.aspx.designer.cs">
       <DependentUpon>PessoaList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PessoaSalario.aspx.cs">
+    <Compile Include="Pages\PessoaSalario.aspx.cs">
       <DependentUpon>PessoaSalario.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PessoaSalario.aspx.designer.cs">
+    <Compile Include="Pages\PessoaSalario.aspx.designer.cs">
       <DependentUpon>PessoaSalario.aspx</DependentUpon>
     </Compile>
-    <Compile Include="RelatorioSalariosDownload.aspx.cs">
+    <Compile Include="Pages\RelatorioSalariosDownload.aspx.cs">
       <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RelatorioSalariosDownload.aspx.designer.cs">
+    <Compile Include="Pages\RelatorioSalariosDownload.aspx.designer.cs">
       <DependentUpon>RelatorioSalariosDownload.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\RelatorioSalarios.cs">

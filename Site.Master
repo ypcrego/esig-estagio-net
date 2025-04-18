@@ -47,8 +47,8 @@
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Home.aspx">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/PessoaSalario">Salários</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/PessoaList">Pessoas</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Pages/PessoaSalario">Salários</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Pages/PessoaList">Pessoas</a></li>
                     </ul>
                 </div>
             </div>

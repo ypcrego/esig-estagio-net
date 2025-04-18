@@ -13,7 +13,7 @@
 
     <div class="d-flex flex-column align-items-start gap-2 mb-4">
         <asp:HyperLink ID="btnBaixarRelatorio" runat="server"
-            NavigateUrl="~/RelatorioSalariosDownload.aspx"
+            NavigateUrl="~/Pages/RelatorioSalariosDownload.aspx"
             Target="_blank"
             CssClass="btn btn-success">
         <i class="bi bi-download"></i> Baixar Relatório

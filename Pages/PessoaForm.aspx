@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="uc" TagName="Toast" Src="~/controls/Toast.ascx" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <script type="text/javascript" src="Scripts/WebForms/PessoaForm/formValidation.js"></script>
+    <script type="text/javascript" src="../Scripts/WebForms/PessoaForm/formValidation.js"></script>
 
     <h2 id="h2Title" class="mb-4" runat="server"></h2>
 
