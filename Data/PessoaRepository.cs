@@ -209,7 +209,7 @@ namespace WebApplication1.Data
             }
         }
 
-        public async Task DeleteById(int id)
+        public async Task<int> DeleteById(int id)
         {
             using (var conn = new OracleConnection(_connectionString))
             {
@@ -220,7 +220,8 @@ namespace WebApplication1.Data
                 using (var cmd = new OracleCommand(sql, conn))
                 {
                     cmd.Parameters.Add(":id", id);
-                    await cmd.ExecuteNonQueryAsync();
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();  // Get the number of affected rows
+                    return rowsAffected;  // Return the number of rows affected
                 }
             }
         }

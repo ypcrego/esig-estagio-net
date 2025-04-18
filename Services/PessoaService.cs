@@ -37,9 +37,9 @@ namespace WebApplication1.Services
         }
 
 
-        public async Task DeleteById(int id)
+        public async Task<int> DeleteById(int id)
         {
-            await _pessoaRepo.DeleteById(id);
+            return await _pessoaRepo.DeleteById(id);
         }
     }
 }

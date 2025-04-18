@@ -86,7 +86,14 @@ namespace WebApplication1
             try
             {
                 int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[e.RowIndex].Value);
-                _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
+                await _pessoaService.DeleteById(pessoaId);
+
+
+                if (gvPessoas.Rows.Count == 1 && gvPessoas.PageIndex > 0)
+                {
+                    gvPessoas.PageIndex -= 1; // Go back one page if there are no more records on the current page
+                }
+
                 await LoadPessoas(gvPessoas.PageIndex);
             }
             catch (Exception ee)
@@ -101,15 +108,22 @@ namespace WebApplication1
         {
             try
             {
+                var qtDeleted = 0;
                 foreach (GridViewRow row in gvPessoas.Rows)
                 {
                     var chkSelecionar = (CheckBox)row.FindControl("chkSelecionar");
                     if (chkSelecionar?.Checked == true)
                     {
                         int pessoaId = Convert.ToInt32(gvPessoas.DataKeys[row.RowIndex].Value);
-                        _pessoaService.DeleteById(pessoaId).GetAwaiter().GetResult();
+                        qtDeleted += await _pessoaService.DeleteById(pessoaId);
                     }
                 }
+
+                if (gvPessoas.Rows.Count == qtDeleted)
+                {
+                    gvPessoas.PageIndex -= 1; // Go back one page if there are no more records on the current page
+                }
+
                 await LoadPessoas(gvPessoas.PageIndex);
             }
             catch (Exception ee)
