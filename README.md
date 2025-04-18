@@ -13,22 +13,22 @@ Este projeto é uma aplicação **ASP.NET Web Forms** com os seguintes objetivos
 ## Tecnologias Utilizadas
 - ASP.NET Web Forms (.NET Framework 4.7.2)
 - Oracle Database 11g (driver `Oracle.ManagedDataAccess.Client`)
-- C# para camada de negócio e acesso a dados
+- C# 
 - SQL Developer 24.3.1 para extração dos dados da planilha Excel e criação dos *inserts*
 - DBeaver 25.0.2 para execução de scripts SQL
 - Crystal Reports para geração de relatórios em PDF
 
 ## Pré‑requisitos
 
-1. Oracle Database 11g (ou superior) instalado.
-1. Crystal Reports instalado no Visual Studio.
-2. Arquivo `Web.config` configurado conforme o ambiente (ver seção [Configuração de Conexão](#configuração-de-conexão)).
-1. 3. **Execução do script `Sql/create.sql`**, que contém:
-   - Criação do schema/usuário `ESIG_ESTAGIO`. Este nome é utilizado somente nos scripts da pasta `Sql`; altere conforme desejado._
+1. Oracle Database 11g (ou superior) instalado
+2. Crystal Reports instalado no Visual Studio
+3. Arquivo `Web.config` configurado conforme o ambiente (ver seção [Configuração de Conexão](#configuração-de-conexão)).
+4. **Execução do script `Sql/create.sql`**, que inclui:
+   - Criação do schema/usuário `ESIG_ESTAGIO`. Este nome é utilizado somente nos scripts da pasta `Sql`; altere conforme desejado.
    - Criação das tabelas `pessoa`, `cargo` e `pessoa_salario`
    - Criação de `sequence` de `pessoa` para geração automática de IDs
-   - Criação da `procedure` de cálculo de salários
-4. **Execução do script `Sql/inserts.sql`** para popular as tabelas `pessoa` e `cargo`.
+   - Criação da `procedure` de cálculo de salários.
+5. **Execução do script `Sql/inserts.sql`** para popular as tabelas `pessoa` e `cargo`.
 ---
 
 ## Configuração de Conexão
