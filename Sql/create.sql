@@ -44,7 +44,8 @@ CREATE SEQUENCE esig_estagio.pessoa_seq START WITH 3000 INCREMENT BY 1;
 -- Criação da PROCEDURE de cálculo dos salários
 CREATE OR REPLACE PROCEDURE esig_estagio.calcular_salarios IS
 BEGIN
-    TRUNCATE TABLE esig_estagio.pessoa_salario;
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE esig_estagio.pessoa_salario';
+
     INSERT INTO esig_estagio.pessoa_salario (pessoa_id, pessoa_nome, cargo_nome, salario)
     SELECT
         p.ID,
@@ -53,7 +54,7 @@ BEGIN
         c.SALARIO
     FROM
         esig_estagio.pessoa p
-    JOIN
-        esig_estagio.cargo c ON p.CARGO_ID = c.ID;
+        JOIN esig_estagio.cargo c ON p.CARGO_ID = c.ID;
+
     COMMIT;
 END;
