@@ -39,7 +39,7 @@ CREATE TABLE esig_estagio.pessoa_salario (
 );
 
 -- Criação da SEQUENCE
-CREATE SEQUENCE esig_estagio.pessoa_seq START WITH 3000 INCREMENT BY 1;
+CREATE SEQUENCE esig_estagio.pessoa_seq START WITH 3001 INCREMENT BY 1;
 
 -- Criação da PROCEDURE de cálculo dos salários
 CREATE OR REPLACE PROCEDURE esig_estagio.calcular_salarios IS
