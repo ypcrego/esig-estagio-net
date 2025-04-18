@@ -20,12 +20,12 @@
 
             <asp:Panel ID="painelBusca" runat="server" Visible="false">
                 <!-- Título da busca -->
-            <div class="text-center mt-5 mb-2">
-                <h5 class="fw-bold">Buscar pessoa por nome</h5>
-            </div>
+                <div class="text-center mt-5 mb-2">
+                    <h5 class="fw-bold">Buscar pessoa por nome</h5>
+                </div>
 
-            <!-- Barra de busca centralizada -->
-            <uc:BuscaTexto ID="BuscaNome" runat="server" OnBuscarTexto="BuscaNome_BuscarTexto" />
+                <!-- Barra de busca centralizada -->
+                <uc:BuscaTexto ID="BuscaNome" runat="server" OnBuscarTexto="BuscaNome_BuscarTexto" />
             </asp:Panel>
 
 
@@ -41,9 +41,12 @@
                     DataKeyNames="id">
 
                     <Columns>
-                        <asp:TemplateField>
+                        <asp:TemplateField HeaderStyle-Width="50px">
+                            <HeaderTemplate>
+                                <asp:CheckBox ID="chkSelectAll" runat="server" onclick="toggleAll(this)" />
+                            </HeaderTemplate>
                             <ItemTemplate>
-                                <asp:CheckBox ID="chkSelecionar" runat="server" CssClass="form-check form-check-lg" />
+                                <asp:CheckBox ID="chkSelecionar" runat="server" CssClass="chkSelecionar" />
                             </ItemTemplate>
                         </asp:TemplateField>
 
@@ -91,7 +94,8 @@
                 <!-- Botão Deletar Selecionados -->
                 <div class="mt-4">
                     <asp:Button ID="btnDeletarSelecionados" runat="server" Text="Deletar Selecionados"
-                        CssClass="btn btn-danger" 
+                        CssClass="btn btn-danger"
+                        OnClientClick="return confirmarDelecaoSelecionados();"
                         OnClick="BtnDeletarSelecionados_Click" />
                 </div>
 
@@ -100,5 +104,29 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 
+    <script type="text/javascript">
+        // Seleciona todos os checkboxes com a classe chkSelecionar
+        function confirmarDelecaoSelecionados() {
+            // Atenção: o checkbox já tem a classe no próprio <input>
+            var checkboxes = document.querySelectorAll('.chkSelecionar input[type="checkbox"]');
+            var anyChecked = Array.prototype.slice.call(checkboxes)
+                .some(function (chk) { return chk.checked; });
+
+            if (!anyChecked) {
+                alert('Por favor, selecione uma ou mais pessoas primeiro.');
+                return false;  // cancela o postback
+            }
+
+            // Se tiver ao menos um, pergunta a confirmação normal
+            return confirm('Tem certeza que deseja excluir as pessoas selecionadas?');
+        }
+
+        function toggleAll(source) {
+            var checkboxes = document.querySelectorAll('.chkSelecionar input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
 
 </asp:Content>
