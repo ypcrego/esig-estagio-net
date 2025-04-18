@@ -1,12 +1,20 @@
+-- Criação do schema
+CREATE USER esig_estagio IDENTIFIED BY admin;
 
-CREATE TABLE cargo (
+-- Conceder permissões ao schema
+GRANT CONNECT, RESOURCE TO esig_estagio;
+
+-- Definir o schema para uso
+ALTER SESSION SET CURRENT_SCHEMA = esig_estagio;
+
+-- Criação das tabelas no schema esig_estagio
+CREATE TABLE esig_estagio.cargo (
     ID INTEGER PRIMARY KEY,
     NOME VARCHAR2(50),
     SALARIO NUMBER(38)
 );
 
-
-CREATE TABLE pessoa (
+CREATE TABLE esig_estagio.pessoa (
     ID INTEGER PRIMARY KEY,
     NOME VARCHAR2(50) NOT NULL,
     CIDADE VARCHAR2(50) NOT NULL,
@@ -19,11 +27,10 @@ CREATE TABLE pessoa (
     DATA_NASCIMENTO DATE NOT NULL,
     CARGO_ID INTEGER,
     CONSTRAINT fk_pessoa_cargo FOREIGN KEY (CARGO_ID)
-        REFERENCES cargo(ID)
+        REFERENCES esig_estagio.cargo(ID)
 );
 
-
-CREATE TABLE pessoa_salario (
+CREATE TABLE esig_estagio.pessoa_salario (
     pessoa_id INT,
     pessoa_nome VARCHAR2(100),
     cargo_nome VARCHAR2(100),
@@ -32,21 +39,21 @@ CREATE TABLE pessoa_salario (
 );
 
 -- Criação da SEQUENCE
-CREATE SEQUENCE pessoa_seq START WITH 3000 INCREMENT BY 1;
+CREATE SEQUENCE esig_estagio.pessoa_seq START WITH 3000 INCREMENT BY 1;
 
 -- Criação da PROCEDURE de cálculo dos salários
-CREATE OR REPLACE PROCEDURE calcular_salarios IS
+CREATE OR REPLACE PROCEDURE esig_estagio.calcular_salarios IS
 BEGIN
-    EXECUTE IMMEDIATE 'TRUNCATE TABLE pessoa_salario';
-    INSERT INTO pessoa_salario (pessoa_id, pessoa_nome, cargo_nome, salario)
+    TRUNCATE TABLE esig_estagio.pessoa_salario;
+    INSERT INTO esig_estagio.pessoa_salario (pessoa_id, pessoa_nome, cargo_nome, salario)
     SELECT
         p.ID,
         p.NOME,
         c.NOME,
         c.SALARIO
     FROM
-        pessoa p
+        esig_estagio.pessoa p
     JOIN
-        cargo c ON p.CARGO_ID = c.ID;
+        esig_estagio.cargo c ON p.CARGO_ID = c.ID;
     COMMIT;
 END;

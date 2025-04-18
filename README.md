@@ -21,18 +21,18 @@ Este projeto é uma aplicação **ASP.NET Web Forms** com o objetivo de:
 ## Pré‑requisitos
 
 1. **Oracle Database 11g** (ou superior) instalado.
-2. **Schema** criado no Oracle (utilizado nesta tarefa: `ESIG_ESTAGIO`).
-3. **Arquivo `Web.config`** configurado de acordo com seu ambiente. Veja abaixo a seção de **Configuração de Conexão**.
-4. **Execução do script `Sql/create.sql`**, que contém:
+2. **Arquivo `Web.config`** configurado de acordo com seu ambiente. Veja abaixo a seção de **Configuração de Conexão**.
+3. **Execução do script `Sql/create.sql`**, que contém:
+   - Criação do schema/usuário `ESIG_ESTAGIO`. Este nome é utilizado somente nos scripts da pasta `Sql`; altere conforme desejado._
    - Criação das tabelas `pessoa`, `cargo` e `pessoa_salario`
    - Criação da `sequence` para geração automática de IDs
    - Criação da `procedure` de cálculo de salários
-5. **Execução do script `Sql/inserts.sql`** para popular as tabelas `pessoa` e `cargo`.
+4. **Execução do script `Sql/inserts.sql`** para popular as tabelas `pessoa` e `cargo`.
 ---
 
 ## Configuração de Conexão
 
-No arquivo **`Web.config`**, adicione a seguinte **connection string** (ou ajuste de acordo com suas credenciais e ambiente Oracle):
+No arquivo **`Web.config`**, verifique que a **connection string** está da seguinte forma. Caso tenha alterado o schema/usuário (padrão `ESIG_ESTÁGIO`), este trecho precisa ser modificado.
 
 ```xml
 <connectionStrings>
