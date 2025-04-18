@@ -23,12 +23,12 @@ Este projeto é uma aplicação **ASP.NET Web Forms** com os seguintes objetivos
 1. Oracle Database 11g (ou superior) instalado
 2. Crystal Reports instalado no Visual Studio
 3. Arquivo `Web.config` configurado conforme o ambiente (ver seção [Configuração de Conexão](#configuração-de-conexão)).
-4. **Execução do script `Sql/create.sql`**, que inclui:
+4. **Executar o script `Sql/create.sql`**, que inclui:
    - Criação do schema/usuário `ESIG_ESTAGIO`. Este nome é utilizado somente nos scripts da pasta `Sql`; altere conforme desejado.
    - Criação das tabelas `pessoa`, `cargo` e `pessoa_salario`
    - Criação de `sequence` de `pessoa` para geração automática de IDs
    - Criação da `procedure` de cálculo de salários.
-5. **Execução do script `Sql/inserts.sql`** para popular as tabelas `pessoa` e `cargo`.
+5. **Executar o script `Sql/inserts.sql`** para popular as tabelas `pessoa` e `cargo`.
 ---
 
 ## Configuração de Conexão
